@@ -1,4 +1,4 @@
-package com.example.classroom.config.jwt;
+package com.example.classroom.config.security.jwt;
 
 import com.example.classroom.entities.User;
 import io.jsonwebtoken.Claims;
@@ -30,7 +30,6 @@ public class JwtService {
     Map<String, Object> claims = new HashMap<>();
     if (userDetails instanceof User customUserDetails) {
       claims.put("id", customUserDetails.getId());
-      claims.put("email", customUserDetails.getEmail());
       claims.put("role", customUserDetails.getRole());
     }
     return generateToken(claims, userDetails);

@@ -1,7 +1,7 @@
-package com.example.classroom.config;
+package com.example.classroom.config.security;
 
-import com.example.classroom.config.filter.JwtAuthenticationFilter;
-import com.example.classroom.service.UserServiceDetailsImpl;
+import com.example.classroom.config.security.filter.JwtAuthenticationFilter;
+import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,9 +29,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class WebSecurityConfig {
   @Autowired
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private JwtAuthenticationFilter jwtAuthenticationFilter;
   @Autowired
-  private final UserServiceDetailsImpl userService;
+  private UserService userService;
+  @Autowired
+  private AuthenticationEntryPoint authenticationEntryPoint;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,8 +46,11 @@ public class WebSecurityConfig {
               corsConfiguration.setAllowCredentials(true);
               return corsConfiguration;
             }))
+            .exceptionHandling(exceptionHandling -> {
+              exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
+            })
             .authorizeHttpRequests(request -> request
-                    .requestMatchers("/auth/auth").permitAll()
+                    .requestMatchers("/auth/**").permitAll()
                     .anyRequest().authenticated())
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider())
@@ -60,7 +66,7 @@ public class WebSecurityConfig {
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userService);
+    authProvider.setUserDetailsService(userService.userDetailsService());
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
   }

@@ -1,5 +1,9 @@
 package com.example.classroom.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,18 +19,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class User implements UserDetails {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String username;
-  private String email;
   private String role;
-  private String password;
   private String gitHubUsername;
-  private String gitHubPassword;
+  private String gitHubToken;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role));
+  }
+
+  @Override
+  public String getPassword() {
+    return gitHubToken;
+  }
+
+  @Override
+  public String getUsername() {
+    return gitHubUsername;
   }
 
   @Override
