@@ -27,7 +27,6 @@ public class Assignment {
   private Long name;
   private Long description;
   @OneToMany(mappedBy = "assignment")
-  @ToString.Exclude
   private List<AssignmentStudent> studentsAcceptedTask;
   @ManyToOne
   @JoinColumn(name = "course_id")
