@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Embeddable
 public class AssignmentStudentId implements Serializable {
   @Column(name = "user_id")
   private Long userId;
   @Column(name = "assignment_id")
-  private Long assigmentId;
+  private Long assignmentId;
 }

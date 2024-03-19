@@ -25,7 +25,7 @@ public class AssignmentStudent {
   @JoinColumn(name = "user_id")
   private User user;
   @ManyToOne
-  @MapsId("assigmentId")
+  @MapsId("assignmentId")
   @JoinColumn(name = "assignment_id")
   private Assignment assignment;
   private String repositoryName;
