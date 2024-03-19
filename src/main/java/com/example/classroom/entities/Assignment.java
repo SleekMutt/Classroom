@@ -1,12 +1,11 @@
 package com.example.classroom.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -24,20 +23,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Course {
+public class Assignment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "owner_id")
-  private User owner;
-  @ManyToMany
-  @JoinTable(name = "course_student",
-          joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
-          inverseJoinColumns = @JoinColumn(name = "student_id",
-                  referencedColumnName = "id"))
-  private List<User> students;
-  @OneToMany(mappedBy = "course")
-  private List<Assignment> assignments;
+  private String description;
+  @OneToMany(mappedBy = "assignment")
+  private List<AssignmentStudent> studentsAcceptedTask;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "course_id")
+  private Course course;
 }
