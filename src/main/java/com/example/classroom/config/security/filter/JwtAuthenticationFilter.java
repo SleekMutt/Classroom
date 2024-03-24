@@ -1,7 +1,7 @@
 package com.example.classroom.config.security.filter;
 
 import com.example.classroom.config.security.jwt.JwtService;
-import com.example.classroom.service.UserService;
+import com.example.classroom.service.user.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtService jwtService;
-  private final UserService userService;
+  private final UserServiceImpl userServiceImpl;
 
 
   @Override
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     var username = jwtService.extractUserName(jwt);
 
     if (StringUtils.hasLength(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-      UserDetails userDetails = userService.userDetailsService()
+      UserDetails userDetails = userServiceImpl.userDetailsService()
               .loadUserByUsername(username);
 
       if (jwtService.isTokenValid(jwt, userDetails)) {

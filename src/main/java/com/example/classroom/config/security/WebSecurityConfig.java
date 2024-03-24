@@ -1,7 +1,7 @@
 package com.example.classroom.config.security;
 
 import com.example.classroom.config.security.filter.JwtAuthenticationFilter;
-import com.example.classroom.service.UserService;
+import com.example.classroom.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +31,7 @@ public class WebSecurityConfig {
   @Autowired
   private JwtAuthenticationFilter jwtAuthenticationFilter;
   @Autowired
-  private UserService userService;
-  @Autowired
-  private AuthenticationEntryPoint authenticationEntryPoint;
+  private UserServiceImpl userServiceImpl;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,9 +44,6 @@ public class WebSecurityConfig {
               corsConfiguration.setAllowCredentials(true);
               return corsConfiguration;
             }))
-            .exceptionHandling(exceptionHandling -> {
-              exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
-            })
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/auth/**").permitAll()
                     .anyRequest().authenticated())
@@ -66,7 +61,7 @@ public class WebSecurityConfig {
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userService.userDetailsService());
+    authProvider.setUserDetailsService(userServiceImpl.userDetailsService());
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
   }
