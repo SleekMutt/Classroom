@@ -33,14 +33,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
 
-    var authHeader = request.getHeader("Authorization");
+    String authHeader = request.getHeader("Authorization");
     if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    var jwt = authHeader.substring("Bearer ".length());
-    var username = jwtService.extractUserName(jwt);
+    String jwt = authHeader.substring("Bearer ".length());
+    String username = jwtService.extractUserName(jwt);
 
     if (StringUtils.hasLength(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = userServiceImpl.userDetailsService()
