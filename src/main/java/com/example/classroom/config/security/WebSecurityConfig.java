@@ -1,7 +1,9 @@
 package com.example.classroom.config.security;
 
 import com.example.classroom.config.security.filter.JwtAuthenticationFilter;
+import com.example.classroom.config.security.filter.OrganizationPresenceFilter;
 import com.example.classroom.service.user.UserServiceImpl;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,8 @@ public class WebSecurityConfig {
   @Autowired
   private JwtAuthenticationFilter jwtAuthenticationFilter;
   @Autowired
+  private OrganizationPresenceFilter organizationPresenceFilter;
+  @Autowired
   private UserServiceImpl userServiceImpl;
 
   @Bean
@@ -46,9 +50,11 @@ public class WebSecurityConfig {
             }))
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/test/webhook").permitAll()
                     .anyRequest().authenticated())
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider())
+            .addFilterBefore(organizationPresenceFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }

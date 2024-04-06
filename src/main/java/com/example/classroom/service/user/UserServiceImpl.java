@@ -50,4 +50,9 @@ public class UserServiceImpl implements IUserService {
   public void updateTokenByUsername(String username, String token) {
     userRepository.updateTokenByUsername(username, token);
   }
+
+  @Override
+  public void updateActivationFlagByUsername(String username, boolean flag) {
+    userRepository.updateActivationFlagByUsername(username, flag);
+  }
 }

@@ -12,8 +12,12 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
   User getUserByGitHubUsername(String username);
   boolean existsUserByGitHubUsername(String username);
-  @Transactional
   @Modifying
   @Query("update User u set u.gitHubToken = :token where u.gitHubUsername = :username")
+  @Transactional
   void updateTokenByUsername(@Param(value = "username") String username, @Param(value = "token") String token);
+  @Modifying
+  @Query("update User u set u.addedToOrganization = :flag where u.gitHubUsername = :username")
+  @Transactional
+  void updateActivationFlagByUsername(@Param(value = "username") String username, @Param(value = "flag") boolean flag);
 }

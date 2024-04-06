@@ -33,6 +33,7 @@ public class User implements UserDetails {
   @Column(unique = true)
   private String gitHubUsername;
   private String gitHubToken;
+  private boolean addedToOrganization;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,6 +67,6 @@ public class User implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return addedToOrganization;
   }
 }
