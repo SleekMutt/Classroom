@@ -1,6 +1,9 @@
 package com.example.classroom.entities;
 
+import com.example.classroom.entities.listener.AssignmentListener;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,13 +26,14 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
+@EntityListeners(AssignmentListener.class)
 public class Assignment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private String description;
-  @OneToMany(mappedBy = "assignment")
+  @OneToMany(mappedBy = "assignment", cascade = CascadeType.REMOVE)
   private List<AssignmentStudent> studentsAcceptedTask;
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "course_id")

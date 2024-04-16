@@ -1,5 +1,6 @@
 package com.example.classroom.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class Course {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
+  private String joiningCode;
   @ManyToOne(optional = false)
   @JoinColumn(name = "owner_id")
   private User owner;
@@ -38,6 +40,6 @@ public class Course {
           inverseJoinColumns = @JoinColumn(name = "student_id",
                   referencedColumnName = "id"))
   private List<User> students;
-  @OneToMany(mappedBy = "course")
+  @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
   private List<Assignment> assignments;
 }

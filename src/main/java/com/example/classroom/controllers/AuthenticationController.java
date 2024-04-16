@@ -1,6 +1,6 @@
 package com.example.classroom.controllers;
 
-import com.example.classroom.service.Oauth2Service;
+import com.example.classroom.service.auth.Oauth2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
