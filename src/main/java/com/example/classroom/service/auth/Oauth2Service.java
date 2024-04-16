@@ -3,10 +3,10 @@ package com.example.classroom.service.auth;
 import com.example.classroom.config.security.jwt.JwtService;
 import com.example.classroom.dto.GithubTokenRequest;
 import com.example.classroom.entities.User;
+import com.example.classroom.service.github.GitHubServiceImpl;
 import com.example.classroom.service.user.UserServiceImpl;
 import lombok.Getter;
 import org.kohsuke.github.GHMyself;
-import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class Oauth2Service {
   @Autowired
   private JwtService jwtService;
   @Autowired
-  private GHOrganization organization;
+  private GitHubServiceImpl gitHubService;
 
   @Getter
   @Value("${spring.security.oauth2.client.registration.github.client-id}")
@@ -32,7 +32,6 @@ public class Oauth2Service {
   @Value("${spring.security.oauth2.client.registration.github.client-secret}")
   private String clientSecret;
 
-  //TODO Виділити інвайт в організацію в окремий функціонал
   public String getAccessToken(String code) {
     String accessTokenUri = "https://github.com/login/oauth/access_token" +
             "?client_id=" + clientId +
@@ -42,7 +41,12 @@ public class Oauth2Service {
     try {
       GitHub github = new GitHubBuilder().withOAuthToken(gitHubAccessToken.getAccessToken()).build();
       GHMyself myself = github.getMyself();
-      organization.add(myself, GHOrganization.Role.MEMBER);
+      try{
+        gitHubService.inviteUserToOrganization(myself.getLogin());
+      }
+      catch (Exception ignored){
+
+      }
       if (!userServiceImpl.existsUserByUsername(myself.getLogin())) {
         registerUser(myself.getLogin(), gitHubAccessToken.getAccessToken());
       }
