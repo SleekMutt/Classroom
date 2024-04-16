@@ -20,14 +20,10 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class OrganizationPresenceFilter extends OncePerRequestFilter {
-  @Autowired
-  private JwtService jwtService;
-  @Autowired
-  private UserServiceImpl userService;
-  @Autowired
-  private GHOrganization organization;
-  @Autowired
-  private GitHub gitHub;
+  private final JwtService jwtService;
+  private final UserServiceImpl userService;
+  private final GHOrganization organization;
+  private final GitHub gitHub;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
