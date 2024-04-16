@@ -1,6 +1,8 @@
 package com.example.classroom.service.user;
 
+import com.example.classroom.dto.user.UserDTO;
 import com.example.classroom.entities.User;
+import com.example.classroom.mapper.UserMapper;
 import com.example.classroom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,11 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService {
   @Autowired
   private UserRepository userRepository;
+  @Autowired
+  private UserMapper userMapper;
 
   public User createUser(User user) {
     return userRepository.save(user);
@@ -20,14 +25,14 @@ public class UserServiceImpl implements IUserService {
   public void deleteUser(Long id) {
     userRepository.deleteById(id);
   }
-  public User getUserById(Long id) {
-    return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+  public UserDTO getUserById(Long id) {
+    return userMapper.entityToDto(userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No user was found")));
   }
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
+  public List<UserDTO> getAllUsers() {
+    return userRepository.findAll().stream().map(userMapper::entityToDto).collect(Collectors.toList());
   }
-  public User updateUser(User user) {
-    return userRepository.save(user);
+  public UserDTO updateUser(UserDTO user) {
+    return userMapper.entityToDto(userRepository.save(userMapper.dtoToEntity(user)));
   }
 
   public UserDetailsService userDetailsService() {
