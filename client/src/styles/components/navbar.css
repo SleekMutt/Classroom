@@ -1,0 +1,22 @@
+.custom-navbar {
+    background-color: rgb(212, 214, 213);
+  }
+
+  .login-button {
+    background-color:  rgb(59, 58, 59);
+    border-color: rgb(59, 58, 59);
+  }
+  
+ .login-button:hover {
+  background-color:  rgb(31, 30, 31);
+  border-color:  rgb(31, 30, 31);
+}
+.login-button:active {
+  background-color:  rgb(31, 30, 31);
+  border-color:  rgb(31, 30, 31);
+}
+
+.login-button:focus {
+  background-color:  rgb(31, 30, 31);
+  border-color:  rgb(31, 30, 31);
+}
