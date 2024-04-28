@@ -10,7 +10,6 @@ const Login = () => {
     const authSubscription = authService.isAuthenticated$().subscribe(isAuthenticated => {
       setLoggedIn(isAuthenticated);
     });
-
     return () => {
       authSubscription.unsubscribe();
     };
