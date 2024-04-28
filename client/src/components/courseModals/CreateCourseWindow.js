@@ -3,17 +3,16 @@ import { useState } from "react";
 import {axiosAPI} from '../../api/axiosClient'
 import { useNavigate } from "react-router-dom";
 
-const JoinCourseWindow = ({handleClose}) => { 
-    const [form, setForm] = useState({code: ""});
+const CreateCourseWindow = ({handleClose}) => { 
+    const [form, setForm] = useState({name: ""});
     const navigate = useNavigate();
 
     const joinCourse = (event) => {
         event.preventDefault();
 
-        axiosAPI.patch('/course/join-course', null, {
-            params: {
-              code: form.code
-            },
+        axiosAPI.post('/course/', {
+            name: form.name
+        }, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
@@ -27,8 +26,8 @@ const JoinCourseWindow = ({handleClose}) => {
                 message: error.response.data.messages
             }})          
         }).finally( () => {
-          handleClose()
-          });;
+        handleClose()
+        });
     }
 
     const formChange = (event) => {
@@ -40,17 +39,17 @@ const JoinCourseWindow = ({handleClose}) => {
         <Modal show={true} onHide={handleClose} centered>
                     <Form onSubmit={joinCourse}>
           <Modal.Header closeButton>
-            <Modal.Title>Join course</Modal.Title>
+            <Modal.Title>Create Course</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3">
-              <Form.Label>Course code</Form.Label>
+              <Form.Label>Course name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="89a52c973f8640e89cf360980780b6fc"
+                placeholder="Math course"
                 autoFocus
-                name='code'
-                value={form.code}
+                name='name'
+                value={form.name}
                 onChange={formChange}
               />
             </Form.Group>
@@ -60,7 +59,7 @@ const JoinCourseWindow = ({handleClose}) => {
               Close
             </Button>
             <Button variant="primary" type="submit">
-              Join Course
+              Create Course
             </Button>
           </Modal.Footer>
         </Form>  
@@ -68,4 +67,4 @@ const JoinCourseWindow = ({handleClose}) => {
     );
   }
   
-  export default JoinCourseWindow;
+  export default CreateCourseWindow;

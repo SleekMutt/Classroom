@@ -3,11 +3,14 @@ import {Nav, Navbar, NavDropdown, Container, Button} from "react-bootstrap";
 import '../styles/components/navbar.css'
 import BookIcon from '../assets/book-icon.svg';
 import authService from '../services/AuthService';
-import JoinCourseWindow from './courseModals/ModalWindow';
 import { useNavigate } from 'react-router';
+import CreateCourseWindow from './courseModals/CreateCourseWindow';
+import JoinCourseWindow from './courseModals/ModalWindow';
+
 const NavigationBar = () => {
   const [loggedIn, setLoggedIn] = useState(authService.isAuthenticated());
-  const [showModal, setShowModal] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const authSubscription = authService.isAuthenticated$().subscribe(isAuthenticated => {
@@ -33,8 +36,8 @@ const NavigationBar = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link  onClick={() => loggedIn ? setShowModal(true) : navigate('/login')}>Join course</Nav.Link>
-              <Nav.Link href="create-course">Create course</Nav.Link>
+              <Nav.Link  onClick={() => loggedIn ? setShowJoinModal(true) : navigate('/login')}>Join course</Nav.Link>
+              <Nav.Link onClick={() => loggedIn ? setShowCreateModal(true) : navigate('/login')}>Create course</Nav.Link>
               <NavDropdown title="Courses" id="collapsible-nav-dropdown">
                 <NavDropdown.Item href="owned-courses">Owned courses</NavDropdown.Item>
                 <NavDropdown.Item href="joined-courses">Joined courses</NavDropdown.Item>
@@ -46,7 +49,8 @@ const NavigationBar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {showModal && <JoinCourseWindow handleClose={() => setShowModal(false)} />}
+      {showJoinModal && <JoinCourseWindow handleClose={() => setShowJoinModal(false)} />}
+      {showCreateModal && <CreateCourseWindow handleClose={() => setShowCreateModal(false)} />}
     </div>
   );
 };
