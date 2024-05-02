@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Nav, Navbar, NavDropdown, Container, Button} from "react-bootstrap";
+import {Nav, Navbar, NavDropdown, Container, Button, Row} from "react-bootstrap";
 import '../styles/components/navbar.css'
 import BookIcon from '../assets/book-icon.svg';
 import authService from '../services/AuthService';
 import { useNavigate } from 'react-router';
 import CreateCourseWindow from './courseModals/CreateCourseWindow';
 import JoinCourseWindow from './courseModals/ModalWindow';
-
 const NavigationBar = () => {
   const [loggedIn, setLoggedIn] = useState(authService.isAuthenticated());
   const [showJoinModal, setShowJoinModal] = useState(false);

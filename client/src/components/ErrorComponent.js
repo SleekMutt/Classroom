@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../styles/components/error.css'
 import ErrorIcon from '../assets/error-icon.png';
 import { useLocation } from 'react-router';

@@ -4,14 +4,15 @@ import {axiosAPI} from '../../api/axiosClient'
 import { useNavigate } from "react-router-dom";
 
 const CreateCourseWindow = ({handleClose}) => { 
-    const [form, setForm] = useState({name: ""});
+    const [form, setForm] = useState({name: "", description: ""});
     const navigate = useNavigate();
 
-    const joinCourse = (event) => {
+    const createCourse = (event) => {
         event.preventDefault();
 
         axiosAPI.post('/course/', {
-            name: form.name
+            name: form.name,
+            description: form.description
         }, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -37,7 +38,7 @@ const CreateCourseWindow = ({handleClose}) => {
 
     return (
         <Modal show={true} onHide={handleClose} centered>
-                    <Form onSubmit={joinCourse}>
+                    <Form onSubmit={createCourse}>
           <Modal.Header closeButton>
             <Modal.Title>Create Course</Modal.Title>
           </Modal.Header>
@@ -53,7 +54,18 @@ const CreateCourseWindow = ({handleClose}) => {
                 onChange={formChange}
               />
             </Form.Group>
-                </Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="This course is about..."
+                autoFocus
+                name='description'
+                value={form.description}
+                onChange={formChange}
+              />
+            </Form.Group>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
