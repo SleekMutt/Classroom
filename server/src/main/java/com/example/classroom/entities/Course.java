@@ -30,6 +30,7 @@ public class Course {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
+  private String description;
   private String joiningCode;
   @ManyToOne(optional = false)
   @JoinColumn(name = "owner_id")

@@ -47,6 +47,12 @@ public class CourseServiceImpl implements ICourseService {
   public List<CourseDTO> getAllCourses() {
     return courseRepository.findAll().stream().map(courseMapper::entityToDto).collect(Collectors.toList());
   }
+
+  @Override
+  public List<CourseDTO> getAllCoursesByOwner(Long id) {
+    return courseRepository.findAllByOwner_Id(id).stream().map(courseMapper::entityToDto).collect(Collectors.toList());
+  }
+
   @Override
   public CourseDTO updateCourse(CourseToUpdateDTO course) {
     Course course1 = courseRepository.findById(course.getId()).orElseThrow(() -> new NoSuchElementException("No course was found"));

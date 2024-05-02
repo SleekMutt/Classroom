@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourseToCreateDTO {
   private String name;
+  private String description;
 }

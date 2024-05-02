@@ -33,6 +33,10 @@ public class CourseController {
   public ResponseEntity<List<CourseDTO>> getAllCourse()  {
     return new ResponseEntity<>(courseService.getAllCourses(), HttpStatus.OK);
   }
+  @GetMapping("/owned-courses")
+  public ResponseEntity<List<CourseDTO>> getAllOwnedCourses(@AuthenticationPrincipal User user)  {
+    return new ResponseEntity<>(courseService.getAllCoursesByOwner(user.getId()), HttpStatus.OK);
+  }
   @GetMapping("/{id}")
   public ResponseEntity<CourseDTO> getCourseById(@PathVariable("id") Long id)  {
     return new ResponseEntity<>(courseService.getCourseById(id), HttpStatus.OK);

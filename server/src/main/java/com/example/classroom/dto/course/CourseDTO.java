@@ -17,6 +17,7 @@ import java.util.List;
 public class CourseDTO {
   private Long id;
   private String name;
+  private String description;
   private String joiningCode;
   private CourseParticipantDTO owner;
   private List<CourseParticipantDTO> students;

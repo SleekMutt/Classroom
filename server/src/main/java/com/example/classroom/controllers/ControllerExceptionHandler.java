@@ -27,13 +27,15 @@ public class ControllerExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(true, List.of(ex.getMessage())));
   }
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleNoSuchElementException(MethodArgumentNotValidException ex) {
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
     ex.getBindingResult().getAllErrors().forEach((error) -> {
       String fieldName = ((FieldError) error).getField();
       String errorMessage = error.getDefaultMessage();
       errors.put(fieldName, errorMessage);
     });
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(true, errors.values().stream().toList()));
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(true, errors.entrySet().stream()
+            .map(entry -> entry.getKey() + " " + entry.getValue())
+            .toList()));
   }
 }

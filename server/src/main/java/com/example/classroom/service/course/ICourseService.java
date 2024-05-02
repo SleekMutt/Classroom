@@ -14,6 +14,7 @@ public interface ICourseService {
   void deleteCourse(Long id);
   CourseDTO getCourseById(Long id);
   List<CourseDTO> getAllCourses();
+  List<CourseDTO> getAllCoursesByOwner(Long id);
   CourseDTO updateCourse(CourseToUpdateDTO course);
   CourseDTO addStudentToTheCourseByCode(String code, User user);
   boolean isOwner(Long id, User user);

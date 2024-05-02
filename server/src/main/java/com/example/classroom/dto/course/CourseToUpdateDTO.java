@@ -12,4 +12,5 @@ public class CourseToUpdateDTO {
   @NotNull(message = "Course id cannot be null")
   private Long id;
   private String name;
+  private String description;
 }
