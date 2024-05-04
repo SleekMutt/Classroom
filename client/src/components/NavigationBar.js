@@ -38,12 +38,12 @@ const NavigationBar = () => {
               <Nav.Link  onClick={() => loggedIn ? setShowJoinModal(true) : navigate('/login')}>Join course</Nav.Link>
               <Nav.Link onClick={() => loggedIn ? setShowCreateModal(true) : navigate('/login')}>Create course</Nav.Link>
               <NavDropdown title="Courses" id="collapsible-nav-dropdown">
-                <NavDropdown.Item href="owned-courses">Owned courses</NavDropdown.Item>
-                <NavDropdown.Item href="joined-courses">Joined courses</NavDropdown.Item>
+                <NavDropdown.Item href="/owned-courses">Owned courses</NavDropdown.Item>
+                <NavDropdown.Item href="/joined-courses">Joined courses</NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>
-              <Button href="login" className='login-button'>{loggedIn ? 'Log out' : "Login"}</Button>
+              <Button href="/login" className='login-button'>{loggedIn ? 'Log out' : "Login"}</Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
