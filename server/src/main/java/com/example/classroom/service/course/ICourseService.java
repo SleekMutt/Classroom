@@ -15,6 +15,7 @@ public interface ICourseService {
   CourseDTO getCourseById(Long id);
   List<CourseDTO> getAllCourses();
   List<CourseDTO> getAllCoursesByOwner(Long id);
+  List<CourseDTO> getAllJoinedByUser(Long id);
   CourseDTO updateCourse(CourseToUpdateDTO course);
   CourseDTO addStudentToTheCourseByCode(String code, User user);
   boolean isOwner(Long id, User user);

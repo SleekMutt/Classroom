@@ -54,6 +54,11 @@ public class CourseServiceImpl implements ICourseService {
   }
 
   @Override
+  public List<CourseDTO> getAllJoinedByUser(Long id) {
+    return courseRepository.findAllByStudentId(id).stream().map(courseMapper::entityToDto).collect(Collectors.toList());
+  }
+
+  @Override
   public CourseDTO updateCourse(CourseToUpdateDTO course) {
     Course course1 = courseRepository.findById(course.getId()).orElseThrow(() -> new NoSuchElementException("No course was found"));
     return courseMapper.entityToDto(courseRepository.save(courseMapper.dtoToEntity(course1, course)));

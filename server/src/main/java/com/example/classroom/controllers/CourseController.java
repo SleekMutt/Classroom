@@ -37,6 +37,10 @@ public class CourseController {
   public ResponseEntity<List<CourseDTO>> getAllOwnedCourses(@AuthenticationPrincipal User user)  {
     return new ResponseEntity<>(courseService.getAllCoursesByOwner(user.getId()), HttpStatus.OK);
   }
+  @GetMapping("/joined-courses")
+  public ResponseEntity<List<CourseDTO>> getAllJoinedCourses(@AuthenticationPrincipal User user)  {
+    return new ResponseEntity<>(courseService.getAllJoinedByUser(user.getId()), HttpStatus.OK);
+  }
   @GetMapping("/{id}")
   public ResponseEntity<CourseDTO> getCourseById(@PathVariable("id") Long id)  {
     return new ResponseEntity<>(courseService.getCourseById(id), HttpStatus.OK);
