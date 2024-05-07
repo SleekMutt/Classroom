@@ -2,6 +2,8 @@ package com.example.classroom.repository;
 
 import com.example.classroom.entities.User;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("update User u set u.addedToOrganization = :flag where u.gitHubUsername = :username")
   @Transactional
   void updateActivationFlagByUsername(@Param(value = "username") String username, @Param(value = "flag") boolean flag);
+  @Query("SELECT u FROM User u JOIN u.courses c WHERE c.id = :courseId")
+  Page<User> findAllByCourseId(@Param("courseId") Long courseId, Pageable pageable);
 }
