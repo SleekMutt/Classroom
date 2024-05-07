@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, {useState } from 'react';
 import  authService from '../../services/AuthService'
 import CommonLoginCard from './CommonLoginCard';
 import { useEffect } from 'react';

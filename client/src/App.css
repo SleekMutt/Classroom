@@ -10,3 +10,16 @@
  .courses-link:hover{
    color: rgb(63, 59, 59);
  }
+
+ .tabs {
+  background-color:  rgb(180, 177, 177);
+  border-width: 1px 0px 1px 0px;
+   border-color: rgb(65, 65, 65); 
+   border-style: solid;
+
+  }
+
+ .gray-text {
+  color: rgb(102, 102, 102);
+ }
+

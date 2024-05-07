@@ -8,6 +8,7 @@ import authService from './services/AuthService';
 import PrivateRoute from './components/route/PrivateRoute';
 import OwnedCourses from './components/courseDisplay/OwnedCourses';
 import JoinedCourses from './components/courseDisplay/JoinedCourses';
+import OwnedCourse from './components/courseDisplay/single course/OwnedCourse';
 
 function App() {
   const queryParameters = new URLSearchParams(window.location.search)
@@ -23,13 +24,16 @@ function App() {
   <Router>
       <NavigationBar/>
       <Routes>
-        <Route path="/Login" element={<Login/>}></Route>
-        <Route path="/" element={<PrivateRoute>
-
+        <Route path="/login" element={<Login/>}></Route>
+        <Route path="/" element={<PrivateRoute></PrivateRoute>}></Route>
+        <Route path="/owned-courses" element={
+        <PrivateRoute>
+        <OwnedCourses />
         </PrivateRoute>}>
         </Route>
-        <Route path="/owned-courses" element={<PrivateRoute>
-        <OwnedCourses />
+        <Route path="/owned-courses/:id" element={
+        <PrivateRoute>
+        <OwnedCourse />
         </PrivateRoute>}>
         </Route>
         <Route path="/joined-courses" element={<PrivateRoute>
