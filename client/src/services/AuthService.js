@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 const history = createBrowserHistory();
 
-  
+
 class AuthService {
   constructor() {
     this.isAuthenticatedSubject = new BehaviorSubject(this.isAuthenticated());
@@ -17,11 +17,11 @@ class AuthService {
     localStorage.removeItem('accessToken');
     this.isAuthenticatedSubject.next(false);
   }
-  toSetAccesstoken(accessToken){
+  toSetAccesstoken(accessToken) {
     localStorage.setItem('accessToken', accessToken);
     this.isAuthenticatedSubject.next(true);
   }
-  
+
   navigateToGitHubOAuth() {
     history.push(
       'https://github.com/login/oauth/authorize?client_id=Iv1.bcdcaeb517916130'

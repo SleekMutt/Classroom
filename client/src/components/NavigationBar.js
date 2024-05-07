@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Nav, Navbar, NavDropdown, Container, Button, Row} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Nav, Navbar, NavDropdown, Container, Button, Row } from "react-bootstrap";
 import '../styles/components/navbar.css'
 import BookIcon from '../assets/book-icon.svg';
 import authService from '../services/AuthService';
@@ -27,15 +27,15 @@ const NavigationBar = () => {
     <div>
       <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary custom-navbar">
         <Container>
-          <Navbar.Brand href="/">  
-            <img src={BookIcon} alt="Book Icon" />       
+          <Navbar.Brand href="/">
+            <img src={BookIcon} alt="Book Icon" />
             {' '}
             Bohdan's classroom
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link  onClick={() => loggedIn ? setShowJoinModal(true) : navigate('/login')}>Join course</Nav.Link>
+              <Nav.Link onClick={() => loggedIn ? setShowJoinModal(true) : navigate('/login')}>Join course</Nav.Link>
               <Nav.Link onClick={() => loggedIn ? setShowCreateModal(true) : navigate('/login')}>Create course</Nav.Link>
               <NavDropdown title="Courses" id="collapsible-nav-dropdown">
                 <NavDropdown.Item href="/owned-courses">Owned courses</NavDropdown.Item>
