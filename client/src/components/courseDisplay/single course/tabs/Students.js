@@ -125,16 +125,16 @@ const StudentsTab = ({ joiningCode, students, courseId }) => {
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           />
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Pagination.Item
-              key={index}
-              active={index + 1 === currentPage}
-              onClick={() => handlePageChange(index + 1)}
+          {
+          [...Array(((currentPage - 2 < 1 ? 5 : currentPage + 2) > totalPages? totalPages : (currentPage - 2 < 1 ? 5 : currentPage + 2)) - (currentPage - 2 < 1 ? 1 : currentPage - 2) + 1).keys()].map(x => x + (currentPage - 2 < 1 ? 1 : currentPage - 2)).map((elem, index) => (
+            (<Pagination.Item
+              key={elem}
+              active={elem === currentPage}
+              onClick={() => handlePageChange(elem)}
             >
-              {index + 1}
-            </Pagination.Item>
+            {elem}
+            </Pagination.Item>)
           ))}
-          {totalPages - currentPage > 3 ? <Pagination.Ellipsis /> : <></>}
           <Pagination.Next
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
