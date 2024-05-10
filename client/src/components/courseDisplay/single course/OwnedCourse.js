@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import EditTab from './tabs/EditTab';
 import StudentsTab from './tabs/Students';
-
 const OwnedCourse = () => {
   const navigate = useNavigate();
   let { id } = useParams();
@@ -69,7 +69,7 @@ const OwnedCourse = () => {
           case 'students':
             return <StudentsTab joiningCode={course.joiningCode} students={course.students} courseId={course.id} />;
           case 'edit':
-            return <div>Content for value 3</div>;
+            return <div><EditTab course={course} setCourse={setCourse}/></div>;
           default:
             return <div>Default content</div>;
         }
