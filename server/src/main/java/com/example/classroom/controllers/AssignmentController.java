@@ -8,6 +8,7 @@ import com.example.classroom.entities.User;
 import com.example.classroom.service.assignment.AssignmentServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +36,10 @@ public class AssignmentController {
   @GetMapping("/")
   public ResponseEntity<List<AssignmentDTO>> getAllAssignments()  {
     return new ResponseEntity<>(assignmentService.getAllAssignment(), HttpStatus.OK);
+  }
+  @GetMapping("/page-by-course-id")
+  public ResponseEntity<Page<AssignmentDTO>> getAssignmentsByCourseId(@RequestParam Long courseId, @RequestParam int page)  {
+    return new ResponseEntity<>(assignmentService.getAssignmentsByCourseId(courseId, page), HttpStatus.OK);
   }
   @GetMapping("/{id}")
   public ResponseEntity<AssignmentDTO> getAssignmentById(@PathVariable("id") Long id)  {

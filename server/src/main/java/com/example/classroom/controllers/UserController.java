@@ -1,9 +1,11 @@
 package com.example.classroom.controllers;
 
+import com.example.classroom.dto.user.GHUserDTO;
 import com.example.classroom.dto.user.UserDTO;
 import com.example.classroom.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class UserController {
     return new ResponseEntity<>(userServiceImpl.getUserById(id), HttpStatus.OK);
   }
   @GetMapping("/gh-list")
-  public ResponseEntity<?> getGHUserByLogin(@RequestParam Long courseId, @RequestParam int page) {
+  public ResponseEntity<Page<GHUserDTO>> getGHUserByLogin(@RequestParam Long courseId, @RequestParam int page) {
     return new ResponseEntity<>(userServiceImpl.getAllGhUserByCourseId(courseId, page), HttpStatus.OK);
   }
   @PreAuthorize("hasRole('ADMIN')")

@@ -3,6 +3,7 @@ package com.example.classroom.service.assignment;
 import com.example.classroom.dto.assignment.AssignmentDTO;
 import com.example.classroom.dto.assignment.AssignmentToCreateDTO;
 import com.example.classroom.dto.assignment.AssignmentToUpdateDTO;
+import com.example.classroom.dto.user.GHUserDTO;
 import com.example.classroom.entities.Assignment;
 import com.example.classroom.entities.AssignmentStudent;
 import com.example.classroom.entities.AssignmentStudentId;
@@ -12,6 +13,8 @@ import com.example.classroom.repository.AssignmentRepository;
 import com.example.classroom.repository.AssignmentStudentRepository;
 import com.example.classroom.service.github.GitHubServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -69,5 +72,10 @@ public class AssignmentServiceImpl implements IAssignmentService{
     build.setRepositoryName(repositoryName);
     assignmentStudentRepository.save(build);
     return assignmentRepository.findById(assignmentId).orElseThrow(NoSuchElementException::new);
+  }
+
+  public Page<AssignmentDTO> getAssignmentsByCourseId(Long courseId, int page) {
+    Page<Assignment> allByCourseId = assignmentRepository.findAllByCourse_Id(courseId, PageRequest.of(page, 5));
+    return allByCourseId.map(assignment -> assignmentMapper.entityToDto(assignment));
   }
 }
