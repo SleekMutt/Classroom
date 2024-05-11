@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -33,6 +35,7 @@ public class Assignment {
   private Long id;
   private String name;
   private String description;
+  private LocalDateTime createdAt;
   @OneToMany(mappedBy = "assignment", cascade = CascadeType.REMOVE)
   private List<AssignmentStudent> studentsAcceptedTask;
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -7,7 +7,7 @@ import com.example.classroom.entities.Assignment;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {CourseMapper.class, AssignmentStudentMapper.class})
+@Mapper(componentModel = "spring", uses = {AssignmentCourseMapper.class, AssignmentStudentMapper.class})
 public interface AssignmentMapper {
   AssignmentDTO entityToDto(Assignment entity);
   Assignment dtoToEntity(AssignmentDTO dto);

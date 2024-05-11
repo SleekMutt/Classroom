@@ -14,6 +14,7 @@ import com.example.classroom.service.github.GitHubServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -30,7 +31,9 @@ public class AssignmentServiceImpl implements IAssignmentService{
   private AssignmentMapper assignmentMapper;
   @Override
   public AssignmentDTO createAssignment(AssignmentToCreateDTO assignment) {
-    return assignmentMapper.entityToDto(assignmentRepository.save(assignmentMapper.dtoToEntity(assignment)));
+    Assignment assignment1 = assignmentMapper.dtoToEntity(assignment);
+    assignment1.setCreatedAt(LocalDateTime.now());
+    return assignmentMapper.entityToDto(assignmentRepository.save(assignment1));
   }
 
   @Override
