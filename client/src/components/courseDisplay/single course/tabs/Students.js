@@ -3,9 +3,9 @@ import { axiosAPI } from '../../../../api/axiosClient';
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Pagination } from 'react-bootstrap';
+import PaginationComponent from '../../../pagination/PaginationComponent';
 
-const StudentsTab = ({ joiningCode, students, courseId }) => {
+const StudentsTab = ({ joiningCode,  courseId }) => {
   const [ghStudents, setGhStudents] = useState([]);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,7 +40,7 @@ const StudentsTab = ({ joiningCode, students, courseId }) => {
     };
 
     fetchGHUsers();
-  }, [students, currentPage]);
+  }, [currentPage]);
 
   const handleDelete = (index) => {
     axiosAPI.patch('/course/delete-user-from-course',
@@ -111,36 +111,13 @@ const StudentsTab = ({ joiningCode, students, courseId }) => {
             </Col>
           ))}
         </div></Col>
-        <Col></Col>
+        <Col>
+
+        </Col>
       </Row>
       <Row >
         <Col></Col>
-        <Col><Pagination style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <Pagination.First onClick={() => handlePageChange(1)} />
-          <Pagination.Prev
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          />
-          {
-          [...Array(((currentPage - 2 < 1 ? 5 : currentPage + 2) > totalPages? totalPages : (currentPage - 2 < 1 ? 5 : currentPage + 2)) - (currentPage - 2 < 1 ? 1 : currentPage - 2) + 1).keys()].map(x => x + (currentPage - 2 < 1 ? 1 : currentPage - 2)).map((elem, index) => (
-            (<Pagination.Item
-              key={elem}
-              active={elem === currentPage}
-              onClick={() => handlePageChange(elem)}
-            >
-            {elem}
-            </Pagination.Item>)
-          ))}
-          <Pagination.Next
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          />
-          <Pagination.Last onClick={() => handlePageChange(totalPages)} />
-        </Pagination></Col>
+        <Col><PaginationComponent setCurrentPage={handlePageChange} currentPage={currentPage} totalPages={totalPages} /></Col>
         <Col></Col>
 
       </Row>

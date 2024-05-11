@@ -6,11 +6,14 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import EditTab from './tabs/EditTab';
 import StudentsTab from './tabs/Students';
+import AssignmentsTab from './tabs/AssignmentsTab';
+
 const OwnedCourse = () => {
   const navigate = useNavigate();
   let { id } = useParams();
   const [key, setKey] = useState('assignments');
   const [course, setCourse] = useState('');
+  const [assignmentsList, setAssignments] = useState('');
 
   useEffect(() => {
     axiosAPI.get(`/course/${id}`, {
@@ -19,9 +22,10 @@ const OwnedCourse = () => {
       }
     })
       .then(response => {
+        const {  assignments, ...restCourse } = response.data;
         console.log(response.data)
-        setCourse(response.data)
-        console.log(course)
+        setCourse(restCourse)
+        setAssignments(assignments)
       })
       .catch(error => {
         console.log(error.response)
@@ -63,15 +67,17 @@ const OwnedCourse = () => {
         </div>
       </div>
       {(() => {
-        switch (key) {
-          case 'assignments':
-            return <div>Content for value 1</div>;
-          case 'students':
-            return <StudentsTab joiningCode={course.joiningCode} students={course.students} courseId={course.id} />;
-          case 'edit':
-            return <div><EditTab course={course} setCourse={setCourse}/></div>;
-          default:
-            return <div>Default content</div>;
+        if(course){
+          switch (key) {
+            case 'assignments':
+              return <AssignmentsTab assignments={assignmentsList} courseId={course.id}/>;
+            case 'students':
+              return <StudentsTab joiningCode={course.joiningCode} students={course.students} courseId={course.id} />;
+            case 'edit':
+              return <EditTab course={course} setCourse={setCourse}/>;
+            default:
+              return <div>Default content</div>;
+          }
         }
       })()}
     </div>

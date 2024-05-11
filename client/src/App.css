@@ -23,3 +23,18 @@
   color: rgb(102, 102, 102);
  }
 
+.heading {
+  font-size: 29px;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 24px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 15px; 
+  }
+}
