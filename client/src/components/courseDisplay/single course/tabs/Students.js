@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PaginationComponent from '../../../pagination/PaginationComponent';
 
-const StudentsTab = ({ joiningCode,  courseId }) => {
+const StudentsTab = ({ joiningCode, courseId }) => {
   const [ghStudents, setGhStudents] = useState([]);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,11 +102,11 @@ const StudentsTab = ({ joiningCode,  courseId }) => {
                   </Link>
                   </Card.Title>
                 </Card.Body>
-                <Card.Footer style={{ backgroundColor: 'transparent', display: 'flex', justifyContent: 'flex-end' }}>
+                {window.location.href.includes('owned-courses') ? <Card.Footer style={{ backgroundColor: 'transparent', display: 'flex', justifyContent: 'flex-end' }}>
                   <Button variant="danger" size="sm" onClick={() => handleDelete(elem.id)}>
                     Delete
                   </Button>
-                </Card.Footer>
+                </Card.Footer> : <></>}
               </Card>
             </Col>
           ))}

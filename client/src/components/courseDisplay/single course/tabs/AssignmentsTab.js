@@ -85,7 +85,7 @@ const AssignmentsTab = ({courseId }) => {
                 ))}
             </div></Col>
             <Col >
-                <Button className="btn-block btn-sm" variant="success" onClick={() => setShowAddModal(true)}>Add assignment</Button>
+            {window.location.href.includes('owned-courses') ? <Button className="btn-block btn-sm" variant="success" onClick={() => setShowAddModal(true)}>Add assignment</Button> : <></>}
             </Col>
         </Row>
         <Row >

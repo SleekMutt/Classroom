@@ -9,7 +9,7 @@ import PrivateRoute from './components/route/PrivateRoute';
 import OwnedCourses from './components/courseDisplay/OwnedCourses';
 import JoinedCourses from './components/courseDisplay/JoinedCourses';
 import OwnedCourse from './components/courseDisplay/single course/OwnedCourse';
-
+import JoinedCourse from './components/courseDisplay/single course/JoinedCourse';
 function App() {
   const queryParameters = new URLSearchParams(window.location.search)
 
@@ -34,6 +34,11 @@ function App() {
         <Route path="/owned-courses/:id" element={
         <PrivateRoute>
         <OwnedCourse />
+        </PrivateRoute>}>
+        </Route>
+        <Route path="/joined-courses/:id" element={
+        <PrivateRoute>
+        <JoinedCourse />
         </PrivateRoute>}>
         </Route>
         <Route path="/joined-courses" element={<PrivateRoute>
