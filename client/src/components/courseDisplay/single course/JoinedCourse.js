@@ -47,7 +47,7 @@ const JoinedCourse = () => {
     <div>
       <div style={{ backgroundColor: 'white' }}>
         <div style={{ height: '25px', maxWidth: '95%', margin: '0 auto' }}>
-          <span><Link to="/owned-courses">Courses</Link> / {course.name}</span>
+          <span><Link to="/joined-courses">Courses</Link> / {course.name}</span>
         </div>
       </div>
       <div className='tabs' >

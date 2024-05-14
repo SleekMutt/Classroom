@@ -1,4 +1,5 @@
 import { Card, Button } from "react-bootstrap";
+import ReactDatePicker from "react-datepicker";
 
 const CommonLoginCard = ({ title, onClick, text, buttonText }) => {
   return (
@@ -10,6 +11,7 @@ const CommonLoginCard = ({ title, onClick, text, buttonText }) => {
           <Button variant="primary" onClick={onClick}>{buttonText}</Button>
         </Card.Body>
       </Card>
+
     </div>
   );
 };
