@@ -55,6 +55,7 @@ public class WebSecurityConfig {
             }))
             .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
               httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler);
+              httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(authEntryPoint);
             })
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/auth/**").permitAll()
@@ -63,8 +64,7 @@ public class WebSecurityConfig {
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(organizationPresenceFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .httpBasic(hbc -> hbc.authenticationEntryPoint(authEntryPoint));
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 
