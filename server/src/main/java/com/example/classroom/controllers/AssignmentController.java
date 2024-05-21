@@ -2,8 +2,10 @@ package com.example.classroom.controllers;
 
 
 import com.example.classroom.dto.assignment.AssignmentDTO;
+import com.example.classroom.dto.assignment.AssignmentStudentDTO;
 import com.example.classroom.dto.assignment.AssignmentToCreateDTO;
 import com.example.classroom.dto.assignment.AssignmentToUpdateDTO;
+import com.example.classroom.dto.comment.CommentRequest;
 import com.example.classroom.entities.User;
 import com.example.classroom.service.assignment.AssignmentServiceImpl;
 import jakarta.validation.Valid;
@@ -15,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -61,9 +62,22 @@ public class AssignmentController {
     assignmentService.deleteAssignment(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-  @PatchMapping("/accept-assignment")
-  public ResponseEntity<HttpStatus> acceptAssignment(@RequestParam("id") Long id, @AuthenticationPrincipal User user)  {
+  @PutMapping("/accept-assignment/{id}")
+  public ResponseEntity<HttpStatus> acceptAssignment(@PathVariable("id") Long id, @AuthenticationPrincipal User user)  {
     assignmentService.acceptAssigment(id, user);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+    @GetMapping("/accepted-assignment/{id}")
+    public ResponseEntity<AssignmentStudentDTO> getAcceptedAssignment(@PathVariable("id") Long id, @AuthenticationPrincipal User user)  {
+      return new ResponseEntity<>(assignmentService.getAcceptedAssignmentsById(id, user.getId()), HttpStatus.OK);
+  }
+  @GetMapping("/reviews")
+  public ResponseEntity<?> getReviews()  {
+      return new ResponseEntity<>(assignmentService.getReviews("ClassroomSleek/BohdanTest123-bd6a1614afb845c9acded545ba9a78ab"), HttpStatus.OK);
+  }
+  @PostMapping("/reviews")
+  public ResponseEntity<?> createComment(@RequestBody CommentRequest comment, @AuthenticationPrincipal User user)  {
+      return new ResponseEntity<>(assignmentService.createReview(comment.getBody(), user.getGitHubToken(), comment.getRepositoryName()), HttpStatus.OK);
   }
 }

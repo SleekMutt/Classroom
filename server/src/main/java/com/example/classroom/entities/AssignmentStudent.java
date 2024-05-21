@@ -2,6 +2,8 @@ package com.example.classroom.entities;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -31,4 +33,7 @@ public class AssignmentStudent {
   @JoinColumn(name = "assignment_id")
   private Assignment assignment;
   private String repositoryName;
+  private Long rating;
+  @Enumerated(EnumType.ORDINAL)
+  private TaskStatus status;
 }
