@@ -1,5 +1,6 @@
 package com.example.classroom.mapper;
 
+import com.example.classroom.dto.user.CourseParticipantDTO;
 import com.example.classroom.dto.user.GHUserDTO;
 import com.example.classroom.dto.user.UserDTO;
 import com.example.classroom.entities.User;
@@ -10,5 +11,6 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
   User dtoToEntity(UserDTO dto);
   UserDTO entityToDto(User entity);
+  CourseParticipantDTO entityToDtoInfo(User entity);
   GHUserDTO entityToDto(GHUser entity);
 }

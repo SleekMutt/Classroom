@@ -1,7 +1,9 @@
 package com.example.classroom.controllers;
 
+import com.example.classroom.dto.user.CourseParticipantDTO;
 import com.example.classroom.dto.user.GHUserDTO;
 import com.example.classroom.dto.user.UserDTO;
+import com.example.classroom.entities.User;
 import com.example.classroom.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +37,10 @@ public class UserController {
   @GetMapping("/{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id)  {
     return new ResponseEntity<>(userServiceImpl.getUserById(id), HttpStatus.OK);
+  }
+  @GetMapping("/user-info")
+  public ResponseEntity<CourseParticipantDTO> getUserInfo(@AuthenticationPrincipal User user)  {
+    return new ResponseEntity<>(userServiceImpl.getUserInfo(user), HttpStatus.OK);
   }
   @GetMapping("/gh-list")
   public ResponseEntity<Page<GHUserDTO>> getGHUserByLogin(@RequestParam Long courseId, @RequestParam int page) {

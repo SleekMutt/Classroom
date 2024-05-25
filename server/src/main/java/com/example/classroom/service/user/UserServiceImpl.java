@@ -1,5 +1,6 @@
 package com.example.classroom.service.user;
 
+import com.example.classroom.dto.user.CourseParticipantDTO;
 import com.example.classroom.dto.user.GHUserDTO;
 import com.example.classroom.dto.user.UserDTO;
 import com.example.classroom.entities.User;
@@ -78,5 +79,9 @@ public class UserServiceImpl implements IUserService {
         throw new RuntimeException(e);
       }
     });
+  }
+
+  public CourseParticipantDTO getUserInfo(User entity){
+    return userMapper.entityToDtoInfo(entity);
   }
 }
