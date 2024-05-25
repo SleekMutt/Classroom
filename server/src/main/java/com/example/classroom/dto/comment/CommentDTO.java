@@ -13,6 +13,7 @@ import java.util.Date;
 @Data
 @Builder
 public class CommentDTO {
+  private Long id;
   private String body;
   private Date createdAt;
   private GHUserDTO user;
