@@ -108,4 +108,15 @@ public class AssignmentServiceImpl implements IAssignmentService{
       throw new RuntimeException(e);
     }
   }
+  public CommentDTO updateReview(String content, String gitHubToken, String repositoryName, Long id) {
+    try {
+      return commentMapper.entityToDto(gitHubService.updateReview(content, gitHubToken, repositoryName, id));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void deleteComment(User user, String repositoryName, Long id) {
+    gitHubService.deleteComment(user.getGitHubToken(), repositoryName, id);
+  }
 }

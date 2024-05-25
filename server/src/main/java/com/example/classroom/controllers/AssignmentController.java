@@ -73,11 +73,21 @@ public class AssignmentController {
       return new ResponseEntity<>(assignmentService.getAcceptedAssignmentsById(id, user.getId()), HttpStatus.OK);
   }
   @GetMapping("/reviews")
-  public ResponseEntity<?> getReviews()  {
-      return new ResponseEntity<>(assignmentService.getReviews("ClassroomSleek/BohdanTest123-bd6a1614afb845c9acded545ba9a78ab"), HttpStatus.OK);
+  public ResponseEntity<?> getComment(@RequestParam("repositoryName") String repositoryName)  {
+      return new ResponseEntity<>(assignmentService.getReviews(repositoryName), HttpStatus.OK);
+  }
+  @PutMapping("/reviews")
+  public ResponseEntity<?> updateComment(@RequestBody CommentRequest comment, @AuthenticationPrincipal User user)  {
+      return new ResponseEntity<>(assignmentService.updateReview(comment.getBody(), user.getGitHubToken(), comment.getRepositoryName(), comment.getId()), HttpStatus.OK);
   }
   @PostMapping("/reviews")
   public ResponseEntity<?> createComment(@RequestBody CommentRequest comment, @AuthenticationPrincipal User user)  {
       return new ResponseEntity<>(assignmentService.createReview(comment.getBody(), user.getGitHubToken(), comment.getRepositoryName()), HttpStatus.OK);
   }
+  @DeleteMapping("/reviews")
+  public ResponseEntity<?> deleteComment(@RequestParam("id") Long id, @RequestParam("repositoryName") String repositoryName, @AuthenticationPrincipal User user)  {
+    assignmentService.deleteComment(user, repositoryName, id);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
 }

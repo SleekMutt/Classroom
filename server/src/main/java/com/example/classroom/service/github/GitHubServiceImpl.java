@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class GitHubServiceImpl implements IGitHubService{
@@ -116,8 +117,46 @@ public class GitHubServiceImpl implements IGitHubService{
 
   public GHIssueComment createReview(String content, String gitHubToken, String repositoryName) {
     try {
-      return new GitHubBuilder().withOAuthToken(gitHubToken).build().getRepository(repositoryName).getPullRequest(1).comment(content);
+      GitHub connection = new GitHubBuilder().withOAuthToken(gitHubToken).build();
+      if(!organization.hasMember(connection.getMyself())){
+        inviteUserToOrganization(connection.getMyself().getLogin());
+        throw new UserOrganizationAbsenceException("User " + connection.getMyself().getLogin() + " is not part of the organization"
+                + "Please accept invitation to be part of the organization");
+      }
+      return connection.getRepository(repositoryName).getPullRequest(1).comment(content);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }  }
+  public GHIssueComment updateReview(String content, String gitHubToken, String repositoryName, Long id) {
+    try {
+      GitHub connection = new GitHubBuilder().withOAuthToken(gitHubToken).build();
+      if(!organization.hasMember(connection.getMyself())){
+        inviteUserToOrganization(connection.getMyself().getLogin());
+        throw new UserOrganizationAbsenceException("User " + connection.getMyself().getLogin() + " is not part of the organization"
+                + "Please accept invitation to be part of the organization");
+      }
+      GHIssueComment commentToUpdate = connection.getRepository(repositoryName).getPullRequest(1)
+              .getComments().stream().filter(elem -> elem.getId() == id)
+              .findFirst().orElseThrow(() -> new NoSuchElementException("No such comment was found"));
+      commentToUpdate.update(content);
+      return commentToUpdate;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }  }
+
+  public void deleteComment(String token, String repositoryName, Long id) {
+    try {
+      GitHub connection = new GitHubBuilder().withOAuthToken(token).build();
+      if(!organization.hasMember(connection.getMyself())){
+        inviteUserToOrganization(connection.getMyself().getLogin());
+        throw new UserOrganizationAbsenceException("User " + connection.getMyself().getLogin() + " is not part of the organization"
+                + "Please accept invitation to be part of the organization");
+      }
+      connection.getRepository(repositoryName).getPullRequest(1)
+              .getComments().stream().filter(elem -> elem.getId() == id)
+              .findFirst().orElseThrow(() -> new NoSuchElementException("No such comment was found")).delete();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
