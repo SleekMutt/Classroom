@@ -10,6 +10,8 @@ import OwnedCourses from './components/courseDisplay/OwnedCourses';
 import JoinedCourses from './components/courseDisplay/JoinedCourses';
 import OwnedCourse from './components/courseDisplay/single course/OwnedCourse';
 import JoinedCourse from './components/courseDisplay/single course/JoinedCourse';
+import StudentAssignmentComponent from './components/courseDisplay/single course/assignment/StudentAssignmentComponent';
+
 function App() {
   const queryParameters = new URLSearchParams(window.location.search)
 
@@ -41,11 +43,17 @@ function App() {
         <JoinedCourse />
         </PrivateRoute>}>
         </Route>
+        <Route path="/joined-courses/:courseId/assignment/:id" element={
+        <PrivateRoute>
+        <StudentAssignmentComponent />
+        </PrivateRoute>}>
+        </Route>
         <Route path="/joined-courses" element={<PrivateRoute>
         <JoinedCourses />
         </PrivateRoute>}>
         </Route>
         <Route path="/error" element={<ErrorComponent code='404' message="Oops! The page you're looking for doesn't exist."/>}></Route>
+        <Route path="/*" element={<ErrorComponent code='404' message="Oops! The page you're looking for doesn't exist."/>}></Route>
       </Routes>
   </Router>
 

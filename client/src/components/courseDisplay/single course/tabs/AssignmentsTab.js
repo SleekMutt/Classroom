@@ -71,6 +71,7 @@ const AssignmentsTab = ({ courseId }) => {
         {assignmentsList.map((elem, idx) => (
           <Col key={idx}  >
             <Card style={{ marginBottom: '20px', fontSize: '1rem', minWidth: "150px" }}>
+              <Link to={`assignment/${elem.id}`} className='courses-link'>
               <Card.Header><GrTask style={{ marginRight: '10px' }}></GrTask>{elem.name ? elem.name : "No name"}</Card.Header>
               <Card.Body>
                 <Card.Subtitle style={{ fontSize: '1rem' }}>
@@ -87,6 +88,7 @@ const AssignmentsTab = ({ courseId }) => {
                   }                                
                 </Card.Text>
               </Card.Body>
+              </Link>
             </Card>
           </Col>
         ))}

@@ -2,11 +2,12 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import { axiosAPI } from '../../api/axiosClient'
 import { useNavigate } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 const JoinCourseWindow = ({ handleClose }) => {
   const [form, setForm] = useState({ code: "" });
   const navigate = useNavigate();
-
+  const history = createBrowserHistory()
   const joinCourse = (event) => {
     event.preventDefault();
 
@@ -19,7 +20,8 @@ const JoinCourseWindow = ({ handleClose }) => {
       }
     })
       .then(response => {
-        console.log('Response:', response.data);
+        history.push('/joined-courses/' + response.data.id)
+        window.location.reload()      
       })
       .catch(error => {
         navigate('/error', {
