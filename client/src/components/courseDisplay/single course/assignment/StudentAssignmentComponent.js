@@ -5,7 +5,7 @@ import { axiosAPI } from '../../../../api/axiosClient';
 import { Card, Button} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
-import CommentsComponent from './CommentsComponent';
+import CommentsComponent from './common/CommentsComponent';
 const StudentAssignmentComponent = () => {
   const navigate = useNavigate();
   let { id } = useParams();

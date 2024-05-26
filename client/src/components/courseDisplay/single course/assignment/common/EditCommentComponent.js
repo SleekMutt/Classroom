@@ -1,7 +1,7 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosAPI } from "../../../../api/axiosClient";
+import { axiosAPI } from "../../../../../api/axiosClient";
 import { Spinner } from "react-bootstrap";
 const EditCommentComponent = ({ id, repositoryName, handleClose, comment, handleUpdate }) => {
     const [form, setForm] = useState({ body: comment });

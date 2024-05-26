@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card,  Spinner, Button, Col, InputGroup, Form } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { axiosAPI } from "../../../../api/axiosClient";
+import { axiosAPI } from "../../../../../api/axiosClient";
 import { Link } from "react-router-dom";
 import EditCommentComponent from "./EditCommentComponent";
 const CommentsComponent = ({repositoryName, user}) => {
