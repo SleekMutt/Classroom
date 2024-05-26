@@ -67,10 +67,18 @@ public class AssignmentController {
     assignmentService.acceptAssigment(id, user);
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
-    @GetMapping("/accepted-assignment/{id}")
-    public ResponseEntity<AssignmentStudentDTO> getAcceptedAssignment(@PathVariable("id") Long id, @AuthenticationPrincipal User user)  {
+  @PutMapping("/rate-assignment")
+  public ResponseEntity<AssignmentStudentDTO> rateAssignment(@RequestParam("assignmentId") Long assignmentId, @RequestParam("userId") Long userId
+          ,@RequestParam("rating") Long rating)  {
+    return new ResponseEntity<>(assignmentService.rateAssignment(assignmentId, userId, rating), HttpStatus.OK);
+  }
+  @GetMapping("/accepted-assignment/{id}")
+  public ResponseEntity<AssignmentStudentDTO> getAcceptedAssignment(@PathVariable("id") Long id, @AuthenticationPrincipal User user)  {
       return new ResponseEntity<>(assignmentService.getAcceptedAssignmentsById(id, user.getId()), HttpStatus.OK);
+  }
+  @GetMapping("/accepted-assignment")
+  public ResponseEntity<AssignmentStudentDTO> getAcceptedAssignment(@RequestParam("userId") Long id, @RequestParam("courseId") Long courseId)  {
+      return new ResponseEntity<>(assignmentService.getAcceptedAssignmentsById(courseId, id), HttpStatus.OK);
   }
   @GetMapping("/reviews")
   public ResponseEntity<?> getComment(@RequestParam("repositoryName") String repositoryName)  {

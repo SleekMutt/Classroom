@@ -119,4 +119,11 @@ public class AssignmentServiceImpl implements IAssignmentService{
   public void deleteComment(User user, String repositoryName, Long id) {
     gitHubService.deleteComment(user.getGitHubToken(), repositoryName, id);
   }
+
+  public AssignmentStudentDTO rateAssignment(Long assignmentId, Long userId, Long rating) {
+    AssignmentStudent assignmentStudent = assignmentStudentRepository.findById(new AssignmentStudentId(userId, assignmentId))
+            .orElseThrow(() -> new NoSuchElementException("User hasn't accepted that assignment"));
+    assignmentStudent.setRating(rating);
+    return assignmentStudentMapper.entityToDto(assignmentStudentRepository.save(assignmentStudent));
+  }
 }
