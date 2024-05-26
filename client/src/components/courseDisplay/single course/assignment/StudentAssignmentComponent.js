@@ -127,19 +127,17 @@ const StudentAssignmentComponent = () => {
             </div>
           </div>
           <div style={{ width: '70%', margin: '0 auto', paddingTop: '20px', display: 'flex', gap: '0px' }} className="cont">
-            <div style={{ flex: '1 1 auto', minWidth: '100px', height: '500px', padding: '15px' }} >
+            <div style={{ flex: '1 1 auto', minWidth: '100px',  padding: '15px' }} >
               <h2>{assignment.name}</h2>
               <h5>    Posted at: {assignment.createdAt ? new Date(assignment.createdAt).toLocaleDateString('en', { year: 'numeric', month: 'short', day: '2-digit', }) : "No creation date was found"}</h5>
               <h5>    Deadline at: {assignment.deadline ? new Date(assignment.deadline).toLocaleDateString('en', { year: 'numeric', month: 'short', day: '2-digit', }) : "No deadline date was found"}</h5>
               <div style={{ width: '100%', height: '2px', backgroundColor: 'black', margin: '10px auto' }}></div>
               <h6>{assignment.description}</h6>
-              <>
-                {
+              {
                   acceptedAssignment ?
                     (<CommentsComponent repositoryName={acceptedAssignment.repositoryName} user={user}></CommentsComponent>
                     ) : null
                 }
-              </>
             </div>
             <div style={{ flex: '0 1 30%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <Card className="text-center" style={{ minWidth: '250px', maxWidth: '100%' }}>
