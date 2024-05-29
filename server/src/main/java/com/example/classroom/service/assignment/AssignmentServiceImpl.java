@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -125,5 +126,8 @@ public class AssignmentServiceImpl implements IAssignmentService{
             .orElseThrow(() -> new NoSuchElementException("User hasn't accepted that assignment"));
     assignmentStudent.setRating(rating);
     return assignmentStudentMapper.entityToDto(assignmentStudentRepository.save(assignmentStudent));
+  }
+  public void addFilesToRepository(String repositoryName, User user, List<MultipartFile> files) throws IOException {
+    gitHubService.addFilesToRepository(repositoryName, user, files);
   }
 }

@@ -15,7 +15,10 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -158,5 +161,26 @@ public class GitHubServiceImpl implements IGitHubService{
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public void addFilesToRepository(String repositoryName, User user, List<MultipartFile> files) throws IOException {
+    GHRepository repository = gitHub.getRepository(repositoryName);
+
+    for (MultipartFile file : files) {
+      File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+      try (FileOutputStream fos = new FileOutputStream(convFile)) {
+        fos.write(file.getBytes());
+      }
+      repository.createContent()
+              .path(file.getOriginalFilename())
+              .content(file.getBytes())
+              .message("Add file " + file.getOriginalFilename())
+              .commit();
+
+      System.out.println(file.getName());
+      System.out.println(file.getContentType());
+      System.out.println(file.getOriginalFilename());
+    }
+
   }
 }

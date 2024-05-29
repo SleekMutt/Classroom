@@ -4,18 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { axiosAPI } from "../../../../../api/axiosClient";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {useDropzone} from 'react-dropzone'
+import { useCallback } from "react";
 
-const AddAssignmentModal = ({ handleClose, handleAdd, courseId}) => {
-  const [form, setForm] = useState({ name: "" , description: "", deadline: "", rating:""});
+const AddAssignmentModal = ({ handleClose, handleAdd, courseId }) => {
+  const [form, setForm] = useState({ name: "", description: "", deadline: "", rating: "" });
   const navigate = useNavigate();
 
   const joinCourse = (event) => {
     event.preventDefault();
     axiosAPI.post('/assignment/', {
-        ...form,
-        course: {
-            id: courseId
-        }
+      ...form,
+      course: {
+        id: courseId
+      }
     }, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -35,6 +37,23 @@ const AddAssignmentModal = ({ handleClose, handleAdd, courseId}) => {
         handleClose()
       });;
   }
+  
+  const onDrop = useCallback(acceptedFiles => {
+    const formData = new FormData();
+    formData.append('file', acceptedFiles[0]);
+
+    axiosAPI.post('/assignment/test', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }
+    });
+
+  }
+  )
+
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
 
   const formChange = (event) => {
     const { name, value } = event.target;
@@ -70,16 +89,25 @@ const AddAssignmentModal = ({ handleClose, handleAdd, courseId}) => {
               onChange={formChange}
             />
           </Form.Group>
-          <Form.Group className="mb-3" style={{display: 'flex', flexDirection: "column"}}>
+          <Form.Group className="mb-3" style={{ display: 'flex', flexDirection: "column" }}>
             <Form.Label>Deadline date</Form.Label>
-              <ReactDatePicker 
-                    showIcon
-                    dateFormat="MMMM d, yyyy h:mm aa"
+            <ReactDatePicker
+              showIcon
+              dateFormat="MMMM d, yyyy h:mm aa"
 
               showTimeInput
-                            selected={form.deadline}
+              selected={form.deadline}
               onChange={(date) => setForm(prevForm => ({ ...prevForm, "deadline": date }))}></ReactDatePicker>
           </Form.Group>
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            {
+              isDragActive ?
+                <p>Drop the files here ...</p> :
+                <p>Drag 'n' drop some files here, or click to select files</p>
+            }
+          </div>
+
           <Form.Group className="mb-3">
             <Form.Label>Rating</Form.Label>
             <Form.Control
