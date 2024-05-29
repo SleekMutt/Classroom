@@ -26,5 +26,5 @@ public class AssignmentToCreateDTO {
   private LocalDateTime deadline;
   @Positive(message = " must be positive")
   @NotNull(message = " can't be null")
-  private Long rating;
+  private Double rating;
 }

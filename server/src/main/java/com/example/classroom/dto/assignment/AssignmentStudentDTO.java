@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class AssignmentStudentDTO {
   private CourseParticipantDTO user;
   private String repositoryName;
-  private Long rating;
+  private Double rating;
   private TaskStatus status;
 }

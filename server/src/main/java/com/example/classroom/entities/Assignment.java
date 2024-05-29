@@ -37,7 +37,7 @@ public class Assignment {
   private String description;
   private LocalDateTime createdAt;
   private LocalDateTime deadline;
-  private Long rating;
+  private Double rating;
   @OneToMany(mappedBy = "assignment", cascade = CascadeType.REMOVE)
   private List<AssignmentStudent> studentsAcceptedTask;
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -18,7 +18,7 @@ public class AssignmentDTO {
   private String description;
   private LocalDateTime createdAt;
   private LocalDateTime deadline;
-  private Long rating;
+  private Double rating;
   private List<AssignmentStudentDTO> studentsAcceptedTask;
   private CourseToUpdateDTO course;
 }

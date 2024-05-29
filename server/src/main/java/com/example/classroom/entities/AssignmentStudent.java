@@ -33,7 +33,7 @@ public class AssignmentStudent {
   @JoinColumn(name = "assignment_id")
   private Assignment assignment;
   private String repositoryName;
-  private Long rating;
+  private Double rating;
   @Enumerated(EnumType.ORDINAL)
   private TaskStatus status;
 }

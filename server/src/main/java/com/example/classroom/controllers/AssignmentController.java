@@ -69,7 +69,7 @@ public class AssignmentController {
   }
   @PutMapping("/rate-assignment")
   public ResponseEntity<AssignmentStudentDTO> rateAssignment(@RequestParam("assignmentId") Long assignmentId, @RequestParam("userId") Long userId
-          ,@RequestParam("rating") Long rating)  {
+          ,@RequestParam("rating") Double rating)  {
     return new ResponseEntity<>(assignmentService.rateAssignment(assignmentId, userId, rating), HttpStatus.OK);
   }
   @GetMapping("/accepted-assignment/{id}")

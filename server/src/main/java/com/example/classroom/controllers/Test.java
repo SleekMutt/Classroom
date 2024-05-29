@@ -43,10 +43,5 @@ public class Test {
     System.out.println(user.getGitHubUsername());
     service.acceptAssigment(1L, user);
   }
-  @PostMapping("/webhook")
-  public void test(@RequestHeader("X-GitHub-Event") String eventType,
-                   @RequestBody String body)  {
-    JSONObject jsonObject = new JSONObject(body);
-    webhookService.processGitHubHookEventData(jsonObject);
-  }
+
 }
