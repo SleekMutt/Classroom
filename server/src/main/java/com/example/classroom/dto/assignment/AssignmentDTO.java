@@ -16,6 +16,8 @@ public class AssignmentDTO {
   private Long id;
   private String name;
   private String description;
+  private String baseRepositoryName;
+
   private LocalDateTime createdAt;
   private LocalDateTime deadline;
   private Double rating;

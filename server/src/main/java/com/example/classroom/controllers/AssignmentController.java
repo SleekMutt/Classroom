@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,8 +57,8 @@ public class AssignmentController {
   }
   @PreAuthorize("@courseServiceImpl.isOwner(#assignment.course.id, principal) or hasRole('ADMIN')")
   @PostMapping("/")
-  public ResponseEntity<AssignmentDTO> createAssignment(@RequestBody @Valid AssignmentToCreateDTO assignment)  {
-    return new ResponseEntity<>(assignmentService.createAssignment(assignment), HttpStatus.OK);
+  public ResponseEntity<AssignmentDTO> createAssignment(@RequestPart @Valid AssignmentToCreateDTO assignment, @RequestParam("files") List<MultipartFile> files) throws IOException {
+    return new ResponseEntity<>(assignmentService.createAssignment(assignment, files), HttpStatus.OK);
   }
   @PostMapping("/add-files-to-repository")
   public ResponseEntity<?> getFile(@RequestParam("repositoryName") String repositoryName, @RequestParam("files") List<MultipartFile> files,
@@ -78,7 +79,7 @@ public class AssignmentController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
   @PutMapping("/accept-assignment/{id}")
-  public ResponseEntity<HttpStatus> acceptAssignment(@PathVariable("id") Long id, @AuthenticationPrincipal User user)  {
+  public ResponseEntity<HttpStatus> acceptAssignment(@PathVariable("id") Long id, @AuthenticationPrincipal User user) throws IOException {
     assignmentService.acceptAssigment(id, user);
     return new ResponseEntity<>(HttpStatus.OK);
   }

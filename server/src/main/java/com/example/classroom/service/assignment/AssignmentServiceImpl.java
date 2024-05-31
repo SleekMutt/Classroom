@@ -44,9 +44,11 @@ public class AssignmentServiceImpl implements IAssignmentService{
   @Autowired
   private CommentMapper commentMapper;
   @Override
-  public AssignmentDTO createAssignment(AssignmentToCreateDTO assignment) {
+  public AssignmentDTO createAssignment(AssignmentToCreateDTO assignment, List<MultipartFile> files) throws IOException {
     Assignment assignment1 = assignmentMapper.dtoToEntity(assignment);
     assignment1.setCreatedAt(LocalDateTime.now());
+    String repositoryName = UUID.randomUUID().toString().replace("-", "");
+    assignment1.setBaseRepositoryName(gitHubService.createBaseRepository(repositoryName, files));
     return assignmentMapper.entityToDto(assignmentRepository.save(assignment1));
   }
 
@@ -72,14 +74,14 @@ public class AssignmentServiceImpl implements IAssignmentService{
   }
 
   @Override
-  public Assignment acceptAssigment(Long assignmentId, User user) {
+  public Assignment acceptAssigment(Long assignmentId, User user) throws IOException {
     Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(NoSuchElementException::new);
     AssignmentStudent build = AssignmentStudent.builder().id(new AssignmentStudentId(user.getId(), assignmentId))
             .assignment(assignment)
             .user(user)
             .status(TaskStatus.NOT_READY)
             .build();
-    String repositoryName = gitHubService.createRepository(UUID.randomUUID().toString().replace("-", "")
+    String repositoryName = gitHubService.createRepository(assignment.getBaseRepositoryName()
             , assignment.getCourse().getOwner(), user);
     build.setRepositoryName(repositoryName);
     assignmentStudentRepository.save(build);
