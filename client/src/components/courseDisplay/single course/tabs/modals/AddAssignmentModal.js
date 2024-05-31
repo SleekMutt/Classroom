@@ -4,23 +4,69 @@ import { useNavigate } from "react-router-dom";
 import { axiosAPI } from "../../../../../api/axiosClient";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {useDropzone} from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 import { useCallback } from "react";
+import { styled } from 'styled-components';
+
+const getColor = (props) => {
+  if (props.isDragAccept) {
+    return '#00e676';
+  }
+  if (props.isDragReject) {
+    return '#ff1744';
+  }
+  if (props.isFocused) {
+    return '#2196f3';
+  }
+  return '#eeeeee';
+}
+
+const Container = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-width: 2px;
+  border-radius: 2px;
+  border-color: ${props => getColor(props)};
+  border-style: dashed;
+  background-color: #fafafa;
+  color: #bdbdbd;
+  outline: none;
+  transition: border .24s ease-in-out;
+`;
 
 const AddAssignmentModal = ({ handleClose, handleAdd, courseId }) => {
   const [form, setForm] = useState({ name: "", description: "", deadline: "", rating: "" });
   const navigate = useNavigate();
+  const [files, setFiles] = useState([])
 
   const joinCourse = (event) => {
     event.preventDefault();
-    axiosAPI.post('/assignment/', {
+    const formData = new FormData();
+
+    let assignment = {
       ...form,
       course: {
         id: courseId
       }
-    }, {
+    }
+    formData.append(
+      'assignment',
+      new Blob([JSON.stringify(assignment)], {
+        type: 'application/json'
+      })
+    );
+
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+
+    axiosAPI.post('/assignment/', formData, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Content-Type': 'multipart/form-data'
       }
     })
       .then(response => {
@@ -37,22 +83,13 @@ const AddAssignmentModal = ({ handleClose, handleAdd, courseId }) => {
         handleClose()
       });;
   }
-  
+
   const onDrop = useCallback(acceptedFiles => {
-    const formData = new FormData();
-    formData.append('file', acceptedFiles[0]);
-
-    axiosAPI.post('/assignment/test', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-      }
-    });
-
+    setFiles(acceptedFiles)
   }
   )
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const { getRootProps, getInputProps, isDragActive, isFocused, isDragAccept, isDragReject } = useDropzone({ onDrop })
 
 
   const formChange = (event) => {
@@ -82,6 +119,9 @@ const AddAssignmentModal = ({ handleClose, handleAdd, courseId }) => {
             <Form.Label>Assignment description</Form.Label>
             <Form.Control
               type="text"
+              as="textarea"
+              rows={5}
+              style={{resize: "none"}}
               placeholder="Test task description"
               autoFocus
               name='description'
@@ -99,14 +139,20 @@ const AddAssignmentModal = ({ handleClose, handleAdd, courseId }) => {
               selected={form.deadline}
               onChange={(date) => setForm(prevForm => ({ ...prevForm, "deadline": date }))}></ReactDatePicker>
           </Form.Group>
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            {
-              isDragActive ?
-                <p>Drop the files here ...</p> :
-                <p>Drag 'n' drop some files here, or click to select files</p>
-            }
-          </div>
+          <section className="container">
+            <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
+              <input {...getInputProps()} />
+              <p>Drag and drop some files here, or click to select files</p>
+            </Container>
+            <aside>
+              <h4>Files</h4>
+              <ul>{files.map((file, indx) => (
+                <li key={file.path}>
+                  File {indx + 1}: {file.path.replace(/\.\w+$/, '')}
+                </li>
+              ))}</ul>
+            </aside>
+          </section>
 
           <Form.Group className="mb-3">
             <Form.Label>Rating</Form.Label>

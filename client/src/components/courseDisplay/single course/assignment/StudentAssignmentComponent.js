@@ -181,15 +181,15 @@ const StudentAssignmentComponent = () => {
         })
       })
       .finally(() => {
-        setImages(null)
-      
+        setImages([])
+
       })
   }
 
   const { acceptedFiles, getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({ onDrop });
-  const files = images.map(file => (
+  const files = images.map((file, indx) => (
     <li key={file.path}>
-      {file.path}
+      File {indx + 1}: {file.path.replace(/\.\w+$/, '')}
     </li>
   ));
 
@@ -224,15 +224,15 @@ const StudentAssignmentComponent = () => {
                 </Card.Body>
                 {!acceptedAssignment ? <Card.Footer>{new Date() < new Date(assignment.deadline) ? <Button variant='success' onClick={acceptAssignment}>Accept</Button> : 'Deadline has already passed'}</Card.Footer> : <></>}
               </Card>
-{acceptedAssignment ?             <section className="container">
+              {acceptedAssignment ? <section className="container">
                 <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
                   <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
+                  <p>Drag and drop some files here, or click to select files to push them to repository</p>
                 </Container>
                 <aside>
                   <h4>Files</h4>
                   <ul>{files}</ul>
-                  {images.length >  0 ? <Button variant='success' onClick={addFiles}>Add files</Button> : <></>}
+                  {images.length > 0 ? <Button variant='success' onClick={addFiles}>Add files</Button> : <></>}
                 </aside>
               </section> : <></>}
             </div>
