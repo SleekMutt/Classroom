@@ -60,6 +60,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/auth/**").permitAll()
                     .requestMatchers("/webhook/**").permitAll()
+                    .requestMatchers("/ws/**").permitAll()
                     .anyRequest().authenticated())
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider())

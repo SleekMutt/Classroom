@@ -1,7 +1,9 @@
 package com.example.classroom.controllers;
 
 
+import com.example.classroom.entities.Notification;
 import com.example.classroom.entities.User;
+import com.example.classroom.repository.NotificationRepository;
 import com.example.classroom.service.assignment.AssignmentServiceImpl;
 import com.example.classroom.service.github.WebhookService;
 import lombok.RequiredArgsConstructor;
@@ -20,28 +22,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
 public class Test {
-  @Value("${github.organization.name}")
-  private String name;
   @Autowired
-  private GitHub gitHub;
-  @Autowired
-  AssignmentServiceImpl service;
-  @Autowired
-  WebhookService webhookService;
+  NotificationRepository repository;
+
   @GetMapping("/")
-  public ResponseEntity<?> hello(){
-    return new ResponseEntity<>("worked", HttpStatus.OK);
+  public void hello(){
+    repository.save(Notification.builder().message("test").sentDate(LocalDateTime.now()).user(User.builder().gitHubUsername("SleekMutt").id(1L).build()).build());
   }
-  @GetMapping("/course")
-  public void course(@AuthenticationPrincipal User user) throws IOException {
-    System.out.println(user.getGitHubUsername());
-    service.acceptAssigment(1L, user);
-  }
+
 
 }

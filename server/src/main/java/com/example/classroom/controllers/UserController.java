@@ -1,9 +1,11 @@
 package com.example.classroom.controllers;
 
+import com.example.classroom.dto.notification.NotificationDTO;
 import com.example.classroom.dto.user.CourseParticipantDTO;
 import com.example.classroom.dto.user.GHUserDTO;
 import com.example.classroom.dto.user.UserDTO;
 import com.example.classroom.entities.User;
+import com.example.classroom.service.notification.NotificationService;
 import com.example.classroom.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ import java.util.List;
 public class UserController {
   @Autowired
   private UserServiceImpl userServiceImpl;
+  @Autowired
+  private NotificationService notificationService;
+
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/")
   public ResponseEntity<List<UserDTO>> getAllUsers()  {
@@ -56,5 +61,9 @@ public class UserController {
   @PutMapping("/")
   public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user)  {
     return new ResponseEntity<>(userServiceImpl.updateUser(user), HttpStatus.OK);
+  }
+  @GetMapping("/notification-by-authorized")
+  public ResponseEntity<List<NotificationDTO>> getAllByUser(@AuthenticationPrincipal User user)  {
+    return new ResponseEntity<>(notificationService.getNotificationsByUsername(user.getGitHubUsername()), HttpStatus.OK);
   }
 }
