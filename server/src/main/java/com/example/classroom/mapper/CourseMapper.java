@@ -12,6 +12,5 @@ public interface CourseMapper {
   Course dtoToEntity(CourseDTO dto);
   Course dtoToEntity(CourseToCreateDTO dto);
   Course dtoToEntity(@MappingTarget Course course, CourseToUpdateDTO dto);
-  CourseToUpdateDTO entityToUpdateDto(Course entity);
   CourseDTO entityToDto(Course entity);
 }

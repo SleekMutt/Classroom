@@ -1,16 +1,12 @@
 package com.example.classroom.service.github;
 
-import com.example.classroom.dto.comment.CommentDTO;
 import com.example.classroom.entities.User;
 import com.example.classroom.exception.UserOrganizationAbsenceException;
-import org.kohsuke.github.GHBranchProtectionBuilder;
-import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHContentUpdateResponse;
 import org.kohsuke.github.GHCreateRepositoryBuilder;
 import org.kohsuke.github.GHFileNotFoundException;
 import org.kohsuke.github.GHIssueComment;
-import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;

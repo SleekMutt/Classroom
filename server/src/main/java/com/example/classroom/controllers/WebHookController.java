@@ -25,10 +25,7 @@ public class WebHookController {
   @PostMapping("/git-push")
   public void gitPushEvent(@RequestHeader("X-GitHub-Event") String eventType,
                    @RequestBody String body)  {
-    System.out.println(body );
-    System.out.println(eventType);
     JSONObject jsonObject = new JSONObject(body);
-    System.out.println(jsonObject);
     webhookService.processGitHubHookEventData(jsonObject);
   }
 }

@@ -1,8 +1,6 @@
 package com.example.classroom.entities.listener;
 
 import com.example.classroom.entities.Notification;
-import com.example.classroom.service.notification.NotificationService;
-import com.example.classroom.service.user.UserServiceImpl;
 import jakarta.persistence.PostPersist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

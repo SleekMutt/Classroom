@@ -1,8 +1,6 @@
 package com.example.classroom.entities;
 
-import com.example.classroom.entities.listener.AssignmentListener;
 import com.example.classroom.entities.listener.NotificationListener;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;

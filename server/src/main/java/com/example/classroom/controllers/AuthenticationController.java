@@ -2,7 +2,6 @@ package com.example.classroom.controllers;
 
 import com.example.classroom.service.auth.Oauth2Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
-  @Autowired
-  private Oauth2Service oauth2Service;
+  private final Oauth2Service oauth2Service;
 
 
   @GetMapping("/github/authorize")

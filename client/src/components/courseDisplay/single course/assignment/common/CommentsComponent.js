@@ -7,7 +7,7 @@ import EditCommentComponent from "./EditCommentComponent";
 const CommentsComponent = ({ repositoryName, user }) => {
   const [loadingComment, setLoadingComment] = useState(true)
   const [loadingComments, setLoadingComments] = useState(true)
-
+  const [loadingValidation, setLoadingValidation] = useState(false)
   const [comments, setComments] = useState([])
   const [form, setForm] = useState({ comment: "" });
   const navigate = useNavigate();
@@ -82,6 +82,51 @@ const CommentsComponent = ({ repositoryName, user }) => {
   },
     [repositoryName])
 
+  //   useEffect(() => {
+  //     const socket = new SockJS('http://localhost:8080/ws');
+  //     const stompClient = Stomp.over(socket);
+
+  //     stompClient.connect({
+  //         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+  //     }, (frame) => {
+  //         stompClient.subscribe('/user/topic/notifications', (message) => {
+  //             NotificationManager.info("Validation completed", "", 3000)
+  //             const newNotifications = JSON.parse(message.body);
+  //         });
+
+  //     });
+
+
+  //     return () => {
+  //         if (stompClient) {
+  //             stompClient.disconnect();
+  //         }
+  //     };
+  // }, []);
+
+  const validate = () => {
+    setLoadingValidation(true)
+    axiosAPI.get("/user/notification-by-authorized", null, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      },
+      params: {
+        repositoryName
+      }
+    })      
+    .then(response => {
+
+    })
+    .catch(error => {
+      setLoadingValidation(false)
+      navigate('/error', {
+        state: {
+          code: error.message,
+          message: error.response.data.messages
+        }
+      })
+    })
+  }
 
   const deleteComment = (id) => {
     axiosAPI.delete('/assignment/reviews', {

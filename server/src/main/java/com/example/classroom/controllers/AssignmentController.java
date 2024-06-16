@@ -9,8 +9,6 @@ import com.example.classroom.dto.comment.CommentRequest;
 import com.example.classroom.entities.User;
 import com.example.classroom.service.assignment.AssignmentServiceImpl;
 import jakarta.validation.Valid;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

@@ -50,7 +50,7 @@ export default function LongMenu() {
 
 
         stompClient.connect({
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJpZCI6MSwic3ViIjoiU2xlZWtNdXR0IiwiaWF0IjoxNzE3NzA1Mjc5LCJleHAiOjE3MTk3MjEyNzl9.ay6RiMiFDSVxeBXUMYevR1ZZ7RtVWb_Bixokinu5MKs'
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }, (frame) => {
             stompClient.subscribe('/user/topic/notifications', (message) => {
                 NotificationManager.info("New notification", "", 3000)

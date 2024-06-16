@@ -15,12 +15,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -35,7 +33,7 @@ public class Course {
   @ManyToOne(optional = false)
   @JoinColumn(name = "owner_id")
   private User owner;
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.REMOVE)
   @JoinTable(name = "course_student",
           joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "student_id",

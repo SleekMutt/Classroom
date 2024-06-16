@@ -72,22 +72,30 @@ const AssignmentsTab = ({ courseId }) => {
           <Col key={idx}  >
             <Card style={{ marginBottom: '20px', fontSize: '1rem', minWidth: "150px" }}>
               <Link to={`assignment/${elem.id}`} className='courses-link'>
-              <Card.Header><GrTask style={{ marginRight: '10px' }}></GrTask>{elem.name ? elem.name : "No name"}</Card.Header>
-              <Card.Body>
-                <Card.Subtitle style={{ fontSize: '1rem' }}>
-                  Posted at: {elem.createdAt ? new Date(elem.createdAt).toLocaleDateString('en', { year: 'numeric', month: 'short', day: '2-digit', }) : "No creation date was found"}
-                </Card.Subtitle>
-                <Card.Text>
-                  {elem.deadline ?
-                    <>
-                      Deadline: <b>{new Date(elem.deadline).toLocaleDateString('en', { year: 'numeric', month: 'short', day: '2-digit', })} </b>
-                       (<b>{Math.floor((new Date(elem.deadline) - new Date()) / (1000 * 60 * 60 * 24))}</b> days left)
-                    </>
-                    :
-                    "No deadline available"
-                  }                                
-                </Card.Text>
-              </Card.Body>
+                <Card.Header><GrTask style={{ marginRight: '10px' }}></GrTask>{elem.name ? elem.name : "No name"}</Card.Header>
+                <Card.Body>
+                  <Card.Subtitle style={{ fontSize: '1rem' }}>
+                    Posted at: {elem.createdAt ? new Date(elem.createdAt).toLocaleDateString('en', { year: 'numeric', month: 'short', day: '2-digit', }) : "No creation date was found"}
+                  </Card.Subtitle>
+                  <Card.Text>
+                    {elem.deadline ? (
+                      <>
+                        Deadline: <b>{new Date(elem.deadline).toLocaleDateString('en', { year: 'numeric', month: 'short', day: '2-digit' })}</b>
+                        {" "}
+                        (
+                        {Math.floor((new Date(elem.deadline) - new Date()) / (1000 * 60 * 60 * 24)) >= 0 ? (
+                          <b>{Math.floor((new Date(elem.deadline) - new Date()) / (1000 * 60 * 60 * 24))} days left</b>
+                        ) : (
+                          <b>Deadline has passed</b>
+                        )}
+                        )
+                      </>
+                    ) : (
+                      "No deadline available"
+                    )}
+                  </Card.Text>
+
+                </Card.Body>
               </Link>
             </Card>
           </Col>

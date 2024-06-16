@@ -1,4 +1,4 @@
-package com.example.classroom.dto.user;
+package com.example.classroom.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseParticipantDTO {
-  private Long id;
-  private String gitHubUsername;
+public class PullRequestPatchDTO {
+  private String filename;
+  private String code;
 }
