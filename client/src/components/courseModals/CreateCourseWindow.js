@@ -8,33 +8,61 @@ const CreateCourseWindow = ({ handleClose }) => {
   const [form, setForm] = useState({ name: "", description: "" });
   const navigate = useNavigate();
   const history = createBrowserHistory();
+  const [errors, setErrors] = useState({});
 
   const createCourse = (event) => {
     event.preventDefault();
-
-    axiosAPI.post('/course/', {
-      name: form.name,
-      description: form.description
-    }, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-      }
-    })
-      .then(response => {
-        history.push('/owned-courses/' + response.data.id)
-        window.location.reload()
+    if(validateForm()){
+      axiosAPI.post('/course/', {
+        name: form.name,
+        description: form.description
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
       })
-      .catch(error => {
-        navigate('/error', {
-          state: {
-            code: error.message,
-            message: error.response.data.messages
-          }
+        .then(response => {
+          history.push('/owned-courses/' + response.data.id)
+          window.location.reload()
         })
-      }).finally(() => {
-        handleClose()
-      });
+        .catch(error => {
+          navigate('/error', {
+            state: {
+              code: error.message,
+              message: error.response.data.messages
+            }
+          })
+        }).finally(() => {
+          handleClose()
+        });
+    }
+
   }
+
+  const validateForm = () => {
+    let errors = {};
+    let formIsValid = true;
+
+    if (form.name === "" ) {
+      formIsValid = false;
+      errors.name = 'Name is required';
+    } else if (form.name.length < 6) {
+      formIsValid = false;
+      errors.name = 'Name should be at least 6 characters long';
+    }
+
+    if (form.description === "") {
+      formIsValid = false;
+      errors.description = 'Description is required';
+    } else if (form.description.length < 6) {
+      formIsValid = false;
+      errors.description = 'Description should be at least 15 characters long';
+    }
+
+    setErrors(errors);
+    console.log(errors)
+    return formIsValid;
+  };
 
   const formChange = (event) => {
     const { name, value } = event.target;
@@ -58,6 +86,7 @@ const CreateCourseWindow = ({ handleClose }) => {
               value={form.name}
               onChange={formChange}
             />
+            {errors.name && <Form.Text className="text-danger">{errors.name}</Form.Text>}
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
@@ -70,6 +99,7 @@ const CreateCourseWindow = ({ handleClose }) => {
               onChange={formChange}
             />
           </Form.Group>
+          {errors.description && <Form.Text className="text-danger">{errors.description}</Form.Text>} 
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
