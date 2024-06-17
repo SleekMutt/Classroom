@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
   Page<Assignment> findAllByCourse_Id(Long courseId, Pageable pageable);
+
 }

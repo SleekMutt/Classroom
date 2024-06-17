@@ -6,7 +6,10 @@ import com.example.classroom.dto.assignment.AssignmentStudentDTO;
 import com.example.classroom.dto.assignment.AssignmentToCreateDTO;
 import com.example.classroom.dto.assignment.AssignmentToUpdateDTO;
 import com.example.classroom.dto.comment.CommentRequest;
+import com.example.classroom.entities.AssignmentStudent;
+import com.example.classroom.entities.TaskStatus;
 import com.example.classroom.entities.User;
+import com.example.classroom.repository.AssignmentStudentRepository;
 import com.example.classroom.service.assignment.AssignmentServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,8 @@ import java.util.List;
 public class AssignmentController {
   @Autowired
   private AssignmentServiceImpl assignmentService;
+  @Autowired
+  private AssignmentStudentRepository assignmentStudentRepository;
 
 
   @PreAuthorize("hasRole('ADMIN')")
@@ -61,6 +66,7 @@ public class AssignmentController {
   @PostMapping("/add-files-to-repository")
   public ResponseEntity<?> getFile(@RequestParam("repositoryName") String repositoryName, @RequestParam("files") List<MultipartFile> files,
                                    @AuthenticationPrincipal User user) throws IOException {
+
     assignmentService.addFilesToRepository(repositoryName, user, files);
     return new ResponseEntity<>(null, HttpStatus.OK);
   }

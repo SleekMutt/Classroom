@@ -9,6 +9,8 @@ import CommentsComponent from './common/CommentsComponent';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { styled } from 'styled-components';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 
 const getColor = (props) => {
   if (props.isDragAccept) {
@@ -50,6 +52,27 @@ const StudentAssignmentComponent = () => {
   const [images, setImages] = useState([])
   const [user, setUser] = useState(null)
 
+  useEffect(() => {
+    const socket = new SockJS('http://localhost:8080/ws');
+    const stompClient = Stomp.over(socket);
+
+
+    stompClient.connect({
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+    }, (frame) => {
+        stompClient.subscribe('/user/topic/openai', (message) => {
+          console.log(message)
+        });
+
+    });
+
+
+    return () => {
+        if (stompClient) {
+            stompClient.disconnect();
+        }
+    };
+}, []);
 
 
   useEffect(() => {

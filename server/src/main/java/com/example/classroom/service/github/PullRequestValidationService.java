@@ -3,14 +3,20 @@ package com.example.classroom.service.github;
 import com.example.classroom.dto.request.OpenAiValidationResponseDto;
 import com.example.classroom.dto.request.PullRequestPatchDTO;
 import com.example.classroom.dto.request.QueuedValidationProcessDto;
+import com.example.classroom.entities.User;
+import com.example.classroom.service.notification.NotificationService;
 import com.example.classroom.service.openai.OpenAiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHPullRequestReview;
 import org.kohsuke.github.GHPullRequestReviewBuilder;
 import org.kohsuke.github.GHPullRequestReviewEvent;
 import org.kohsuke.github.GHRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +34,10 @@ public class PullRequestValidationService {
   private final ObjectMapper objectMapper;
   private final OpenAiService openAiService;
   private final Queue<QueuedValidationProcessDto> requests = new LinkedList<>();
+  @Autowired
+  private SimpMessagingTemplate messagingTemplate;
+  @Autowired
+  private NotificationService notificationService;
   private static final String PROMPT_TEMPLATE = "Hi ChatGPT, could you please review my homework " +
           "and provide detailed comments on it? " +
           "I'm looking for feedback on the content, structure, clarity, " +
@@ -58,7 +68,7 @@ public class PullRequestValidationService {
     this.openAiService = openAiService;
   }
 
-  public void validatePullRequest(String repositoryName) {
+  public void validatePullRequest(String repositoryName, User user) {
     try {
       GHRepository repository = ghOrganization.getRepository(repositoryName);
       GHPullRequest pullRequest = repository.getPullRequest(1);
@@ -75,6 +85,7 @@ public class PullRequestValidationService {
       String prompt = String.format(PROMPT_TEMPLATE, objectMapper.writeValueAsString(fileList));
       requests.add(QueuedValidationProcessDto.builder()
               .prompt(prompt)
+              .user(user)
               .pullRequest(pullRequest)
               .fileCodeLines(fileList.stream()
                       .collect(
@@ -91,7 +102,7 @@ public class PullRequestValidationService {
     }
   }
 
-  @Scheduled(fixedDelay = 21000)
+  @Scheduled(fixedDelay = 3000)
   private void processValidation() {
     if (!requests.isEmpty()) {
       QueuedValidationProcessDto process = requests.poll();
@@ -117,8 +128,10 @@ public class PullRequestValidationService {
           review.body("OpenAI previous review of the pullrequest. "
                   + "The rating is "
                   + openAiResponse.getRating() + "/10.");
-          review.create();
-
+          GHPullRequestReview ghPullRequestReview = review.create();
+          notificationService.sendNotification("Repository " + pullRequest.getRepository().getName() + " was validated by OpenAi. Please review it", process.getUser());
+          messagingTemplate.convertAndSendToUser(process.getUser().getUsername(), "/topic/openai",
+                  ghPullRequestReview.getHtmlUrl());
         } catch (IOException e) {
           throw new RuntimeException(e);
         }

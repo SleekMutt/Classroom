@@ -8,6 +8,7 @@ import com.example.classroom.dto.comment.CommentDTO;
 import com.example.classroom.entities.Assignment;
 import com.example.classroom.entities.AssignmentStudent;
 import com.example.classroom.entities.AssignmentStudentId;
+import com.example.classroom.entities.Notification;
 import com.example.classroom.entities.TaskStatus;
 import com.example.classroom.entities.User;
 import com.example.classroom.mapper.AssignmentMapper;
@@ -16,6 +17,7 @@ import com.example.classroom.mapper.CommentMapper;
 import com.example.classroom.repository.AssignmentRepository;
 import com.example.classroom.repository.AssignmentStudentRepository;
 import com.example.classroom.service.github.GitHubServiceImpl;
+import com.example.classroom.service.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,8 @@ public class AssignmentServiceImpl implements IAssignmentService{
   private AssignmentStudentMapper assignmentStudentMapper;
   @Autowired
   private CommentMapper commentMapper;
+  @Autowired
+  private NotificationService notificationService;
   @Override
   public AssignmentDTO createAssignment(AssignmentToCreateDTO assignment, List<MultipartFile> files) throws IOException {
     Assignment assignment1 = assignmentMapper.dtoToEntity(assignment);
@@ -127,9 +132,15 @@ public class AssignmentServiceImpl implements IAssignmentService{
     AssignmentStudent assignmentStudent = assignmentStudentRepository.findById(new AssignmentStudentId(userId, assignmentId))
             .orElseThrow(() -> new NoSuchElementException("User hasn't accepted that assignment"));
     assignmentStudent.setRating(rating);
-    return assignmentStudentMapper.entityToDto(assignmentStudentRepository.save(assignmentStudent));
+    AssignmentStudent result = assignmentStudentRepository.save(assignmentStudent);
+    notificationService.sendNotification("Your assignment " + result.getAssignment().getName() + " was rated. Please review it", result.getUser());
+    return assignmentStudentMapper.entityToDto(result);
   }
   public void addFilesToRepository(String repositoryName, User user, List<MultipartFile> files) throws IOException {
+    AssignmentStudent test = assignmentStudentRepository.findAssignmentStudentByRepositoryName(repositoryName.substring(repositoryName.lastIndexOf('/') + 1))
+            .orElseThrow(() -> new NoSuchElementException("No accepted assignment  was found"));
+    test.setStatus(TaskStatus.READY);
+    assignmentStudentRepository.save(test);
     gitHubService.addFilesToRepository(repositoryName, user, files);
   }
 }

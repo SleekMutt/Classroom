@@ -6,8 +6,6 @@ import authService from '../services/AuthService';
 import { useNavigate } from 'react-router';
 import CreateCourseWindow from './courseModals/CreateCourseWindow';
 import JoinCourseWindow from './courseModals/ModalWindow';
-import {Badge} from "@mui/material"
-import MailIcon from '@mui/icons-material/Mail';
 import LongMenu from './NotificationComponent';
 const NavigationBar = () => {
   const [loggedIn, setLoggedIn] = useState(authService.isAuthenticated());
@@ -44,7 +42,7 @@ const NavigationBar = () => {
                 <NavDropdown.Item href="/owned-courses">Owned courses</NavDropdown.Item>
                 <NavDropdown.Item href="/joined-courses">Joined courses</NavDropdown.Item>
               </NavDropdown>
-              <Nav.Item><LongMenu></LongMenu></Nav.Item>
+              {loggedIn ? <Nav.Item><LongMenu></LongMenu></Nav.Item> : <></>}
             </Nav>
             <Nav>
               <Button href="/login" className='login-button'>{loggedIn ? 'Log out' : "Login"}</Button>

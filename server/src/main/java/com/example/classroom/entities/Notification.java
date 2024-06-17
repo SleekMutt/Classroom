@@ -1,6 +1,7 @@
 package com.example.classroom.entities;
 
 import com.example.classroom.entities.listener.NotificationListener;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -33,5 +34,6 @@ public class Notification {
   private LocalDateTime sentDate;
   @ManyToOne
   @JoinColumn(name = "user_id")
+  @JsonIgnore
   private User user;
 }

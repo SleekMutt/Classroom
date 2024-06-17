@@ -8,6 +8,10 @@ import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import CommentsComponent from './common/CommentsComponent';
 import { Tabs } from 'react-bootstrap';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { Spinner } from 'react-bootstrap';
+
 const TeacherAssignmentComponent = () => {
     let { id } = useParams();
     const [assignment, setAssignment] = useState('')
@@ -17,6 +21,30 @@ const TeacherAssignmentComponent = () => {
     const [user, setUser] = useState(null);
     const [editing, setEditing] = useState(true);
     const [form, setForm] = useState({ rating: "" });
+    const [validationLoading, setValidationLoading] = useState(false);
+
+    useEffect(() => {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = Stomp.over(socket);
+
+
+        stompClient.connect({
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }, (frame) => {
+            stompClient.subscribe('/user/topic/openai', (message) => {
+                setValidationLoading(false)
+                window.open(message.body.substring(1, message.body.length - 1), '_blank', 'noopener,noreferrer').focus()
+            });
+
+        });
+
+
+        return () => {
+            if (stompClient) {
+                stompClient.disconnect();
+            }
+        };
+    }, []);
 
     useEffect(() => {
         const fetchAssignment = async () => {
@@ -100,6 +128,29 @@ const TeacherAssignmentComponent = () => {
                 })
             })
     }
+
+    const validate = () => {
+        axiosAPI.post('/open-ai/validate', null, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            params: {
+                repositoryName: selectedUser.repositoryName
+            }
+        })
+            .then(response => {
+                console.log()
+            })
+            .catch(error => {
+                navigate('/error', {
+                    state: {
+                        code: error.message,
+                        message: error.response.data.messages
+                    }
+                })
+            })
+    }
+
     return (
 
         <>
@@ -166,8 +217,22 @@ const TeacherAssignmentComponent = () => {
                                                     <Card.Text>{editing ? (selectedUser && selectedUser.rating ? `${selectedUser.rating}/` : '') : <><input style={{ width: '45px' }} value={form.rating} name="rating" onChange={handleChange} />/</>}{assignment.rating} points</Card.Text>
                                                 </Card.Body>
                                             </Card>
-                                            <div style={{ marginLeft: "62%", marginTop: '2%', display: 'flex', gap: '10px' }}>
-                                                {editing ? <Button variant='success' onClick={() => setEditing(false)}>Rate</Button> :
+                                            <div style={{ marginLeft: "62%", marginTop: '2%', display: 'flex', gap: '10px', flexDirection: editing ? "column" : "row" }}>
+                                                {editing ?
+                                                    <>
+                                                        <div>
+                                                            <Button variant='success' style={{ width: "100px", height: "40px" }} onClick={() => setEditing(false)}>Rate</Button>
+                                                        </div>
+                                                        <div>
+                                                            {validationLoading ?
+                                                                <Spinner animation="border" role="status" style={{ marginLeft: "35px" }}>
+                                                                    <span className="visually-hidden">Loading...</span>
+                                                                </Spinner>
+                                                                : <Button style={{ width: "100px", height: "40px" }} onClick={() => {validate(); setValidationLoading(true)}}>Validate</Button>}
+
+                                                        </div>
+                                                    </>
+                                                    :
                                                     <>
                                                         <Button variant='success' onClick={confirmRate}>Cofirm</Button>
                                                         <Button variant='danger' onClick={() => { setEditing(true); setForm({ rating: '' }) }}>Cancel</Button>
